@@ -29,3 +29,6 @@ class WebPage:
                 print(href)
         
         return self.urlsFound
+    
+    def makeFullUrl(self, base, end):
+        return urljoin(base, end)

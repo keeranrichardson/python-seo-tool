@@ -13,3 +13,7 @@ class TestWebPage:
     def testWebPageError(self):
         webPage = WebPage('')
         assert False == webPage.isUrlScannable()
+
+    def testWebPageMakeFullUrl(self):
+        webPage = WebPage('https://keeranrichardson.com')
+        assert 'https://keeranrichardson.com/bobdobbs' == webPage.makeFullUrl('https://keeranrichardson.com','/bobdobbs')
