@@ -1,4 +1,11 @@
-from interface import Interface
+from scanner import Scanner
+from htmlreporter import HTMLReporter
 
-scanner = Interface('https://keeranrichardson.com')
+scanner = Scanner('https://keeranrichardson.com')
 scanner.scan()
+
+#print(HTMLReporter(scanner.getResults()).makeReport())
+
+file = open("htmlReport.html", "w")
+file.write(HTMLReporter(scanner.getResults()).makeReport())
+file.close()
