@@ -4,7 +4,6 @@ Dependencies:
 
 - bs4
 - requests
-- urllib
 
 to install the dependencies:
 
