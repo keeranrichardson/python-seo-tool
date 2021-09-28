@@ -5,9 +5,10 @@ from browserController import BrowserController
 scanner = Scanner('https://keeranrichardson.com')
 scanner.scan()
 
-file = open("htmlReport.html", "w")
+fileName = str(input("enter the name of html report file"))+".html"
+file = open(fileName, "w")
 file.write(HTMLReporter(scanner.getResults()).makeReport())
 file.close()
 
-BrowserController().open("htmlReport.html")
+BrowserController().open(fileName)
 
