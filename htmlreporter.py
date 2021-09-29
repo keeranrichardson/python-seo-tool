@@ -3,8 +3,12 @@
 class HTMLReporter:
     def __init__(self, scannerResults):
         self.scannerResult = scannerResults
-        
+    
+    def aTag(self, url, text):
+        tag = "<a href = '"+url+"' target='_blank'>"+text+"</a>"
 
+        return tag
+        
     def makeReport(self):
         results = self.scannerResult.getResults()
         top = '''
@@ -24,7 +28,10 @@ class HTMLReporter:
                 </html>'''
         middle = ""
         for result in results:
-            lineInMiddle = "<li><a href = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatus())+"' target='_blank'>"+str(result.getStatus())+"</a>"+" <a href = '"+result.url+"' target='_blank'>"+result.url+"</a></li>"
+            statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatus()),str(result.getStatus()))
+            resultUrlLink = self.aTag(result.url, result.url)
+
+            lineInMiddle = "<li>"+statusCodeLink+" "+resultUrlLink+"</li>"
             middle += lineInMiddle+"\n"
         
         html = top+middle+bottom
