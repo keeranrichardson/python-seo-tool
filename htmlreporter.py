@@ -24,7 +24,7 @@ class HTMLReporter:
                 </html>'''
         middle = ""
         for result in results:
-            lineInMiddle = "<li>"+str(result.getStatus())+" <a href = '"+result.url+"'>"+result.url+"</a></li>"
+            lineInMiddle = "<li>"+str(result.getStatus())+" <a href = '"+result.url+"' target='_blank'>"+result.url+"</a></li>"
             middle += lineInMiddle+"\n"
         
         html = top+middle+bottom
