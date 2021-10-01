@@ -1,15 +1,15 @@
-from url import Url
+from urlScanner import UrlScanner
 
 class TestUrl:
     
     def testUrlExistsReturn200(self):
-        url = Url('https://keeranrichardson.com')
+        url = UrlScanner('https://keeranrichardson.com')
         assert 200 == url.getStatus()
 
     def testUrlNotExistsReturn404(self):
-        url = Url('https://keeranrichardson.com/6')
+        url = UrlScanner('https://keeranrichardson.com/6')
         assert 404 == url.getStatus()
 
     def testErrorReadingUrl(self):
-        url = Url('')
+        url = UrlScanner('')
         assert 'error'==url.getStatus()

@@ -1,14 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin
-from url import Url
+from urlScanner import UrlScanner
 
 class WebPage:
     def __init__(self, url):
         self.url = url
 
     def isUrlScannable(self):
-        self.statusCode = Url(self.url).getStatus()
+        self.statusCode = UrlScanner(self.url).getStatus()
 
         if self.statusCode != 200:
             print("can't find the links for "+ self.url+ " because status code = "+ str(self.statusCode))

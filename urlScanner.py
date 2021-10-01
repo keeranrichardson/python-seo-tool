@@ -1,6 +1,6 @@
 import requests
 
-class Url:
+class UrlScanner:
     def __init__(self, url):
         self.url = url
         self.response = None

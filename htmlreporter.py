@@ -28,8 +28,8 @@ class HTMLReporter:
                 </html>'''
         middle = ""
         for result in results:
-            statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatus()),str(result.getStatus()))
-            resultUrlLink = self.aTag(result.url, result.url)
+            statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatusCode()),str(result.getStatusCode()))
+            resultUrlLink = self.aTag(result.getURL(), result.getURL())
 
             lineInMiddle = "<li>"+statusCodeLink+" "+resultUrlLink+"</li>"
             middle += lineInMiddle+"\n"
