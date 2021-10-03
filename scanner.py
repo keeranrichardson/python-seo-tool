@@ -1,6 +1,7 @@
 from webPage import WebPage
 from urlScanner import UrlScanner
 from urlResult import UrlResult
+import datetime
 
 class Scanner:
     def __init__(self, url):
@@ -21,9 +22,16 @@ class Scanner:
 class ScannerResults:
     def __init__(self):
         self.results = []
+        self.startDateTime = datetime.datetime.now()
 
     def add(self, urlResult):
         self.results.append(urlResult)
 
     def getResults(self):
         return self.results
+
+    def getStartDateTime(self):
+        return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")
+    
+    def getStartDateTimeRaw(self):
+        return self.startDateTime

@@ -1,5 +1,4 @@
 
-
 class HTMLReporter:
     def __init__(self, scannerResults):
         self.scannerResult = scannerResults
@@ -26,6 +25,7 @@ class HTMLReporter:
                         </ul>
                     </body>
                 </html>'''
+        scannerStartDateLine = "<h2>Date and time of scan: "+self.scannerResult.getStartDateTime()+"</h2>\n"
         middle = ""
         for result in results:
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatusCode()),str(result.getStatusCode()))
@@ -34,5 +34,5 @@ class HTMLReporter:
             lineInMiddle = "<li>"+statusCodeLink+" "+resultUrlLink+"</li>"
             middle += lineInMiddle+"\n"
         
-        html = top+middle+bottom
+        html = top+scannerStartDateLine+middle+bottom
         return html
