@@ -32,8 +32,6 @@ class HTMLReporter:
         timeDifference = datetime.datetime.now() - self.scannerResult.getStartDateTimeRaw()
         timeDifferenceLine = "<p>Duration of scan: "+str(timeDifference)+"</p>"
 
-#.strftime("%d days %H hours %M minutes %S seconds")
-
         numberOfUrlsFound = str(len(results))
         numberOfUrlsFoundLine = "<p>Number of URLs found = "+numberOfUrlsFound+"</p>"
 
