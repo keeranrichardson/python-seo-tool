@@ -1,3 +1,4 @@
+import datetime
 
 class HTMLReporter:
     def __init__(self, scannerResults):
@@ -25,9 +26,17 @@ class HTMLReporter:
                         </ul>
                     </body>
                 </html>'''
+    
         scannerStartDateLine = "<h2>Date and time of scan: "+self.scannerResult.getStartDateTime()+"</h2>\n"
+
+        timeDifference = datetime.datetime.now() - self.scannerResult.getStartDateTimeRaw()
+        timeDifferenceLine = "<p>Duration of scan: "+str(timeDifference)+"</p>"
+
+#.strftime("%d days %H hours %M minutes %S seconds")
+
         numberOfUrlsFound = str(len(results))
         numberOfUrlsFoundLine = "<p>Number of URLs found = "+numberOfUrlsFound+"</p>"
+
         middle = ""
         for result in results:
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatusCode()),str(result.getStatusCode()))
@@ -36,5 +45,5 @@ class HTMLReporter:
             lineInMiddle = "<li>"+statusCodeLink+" "+resultUrlLink+"</li>"
             middle += lineInMiddle+"\n"
         
-        html = top+scannerStartDateLine+numberOfUrlsFoundLine+middle+bottom
+        html = top+scannerStartDateLine+timeDifferenceLine+numberOfUrlsFoundLine+middle+bottom
         return html
