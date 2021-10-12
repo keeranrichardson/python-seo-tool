@@ -29,8 +29,15 @@ class HTMLReporter:
     
         scannerStartDateLine = "<h2>Date and time of scan: "+self.scannerResult.getStartDateTime()+"</h2>\n"
 
+#https://stackoverflow.com/questions/538666/format-timedelta-to-string
+
         timeDifference = datetime.datetime.now() - self.scannerResult.getStartDateTimeRaw()
-        timeDifferenceLine = "<p>Duration of scan: "+str(timeDifference)+"</p>"
+        seconds = timeDifference.seconds
+        hours, remainder = divmod(seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+#https://docs.python.org/3/library/string.html#format-string-syntax
+        duration = '{:02} hours, {:02} minutes, {:02} seconds'.format(int(hours), int(minutes), int(seconds))
+        timeDifferenceLine = "<p>Duration of scan: "+duration+"</p>"
 
         numberOfUrlsFound = str(len(results))
         numberOfUrlsFoundLine = "<p>Number of URLs found = "+numberOfUrlsFound+"</p>"
