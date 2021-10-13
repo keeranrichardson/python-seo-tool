@@ -43,11 +43,15 @@ class HTMLReporter:
         numberOfUrlsFoundLine = "<p>Number of URLs found = "+numberOfUrlsFound+"</p>"
 
         middle = ""
+
+        lineTemplate = "<li>{} {} [{}]</li>"
+
         for result in results:
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"+str(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
+            parentUrl = self.aTag(result.getParentUrl(), "parent page")
 
-            lineInMiddle = "<li>"+statusCodeLink+" "+resultUrlLink+"</li>"
+            lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl)
             middle += lineInMiddle+"\n"
         
         html = top+scannerStartDateLine+timeDifferenceLine+numberOfUrlsFoundLine+middle+bottom
