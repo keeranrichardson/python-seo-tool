@@ -31,7 +31,7 @@ class HTMLReporter:
 
 #https://stackoverflow.com/questions/538666/format-timedelta-to-string
 
-        timeDifference = datetime.datetime.now() - self.scannerResult.getStartDateTimeRaw()
+        timeDifference = self.scannerResult.getEndDateTimeRaw() - self.scannerResult.getStartDateTimeRaw()
         seconds = timeDifference.seconds
         hours, remainder = divmod(seconds, 3600)
         minutes, seconds = divmod(remainder, 60)

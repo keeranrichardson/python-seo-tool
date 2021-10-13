@@ -23,9 +23,11 @@ class ScannerResults:
     def __init__(self):
         self.results = []
         self.startDateTime = datetime.datetime.now()
+        self.endDateTime = self.startDateTime
 
     def add(self, urlResult):
         self.results.append(urlResult)
+        self.endDateTime = datetime.datetime.now()
 
     def getResults(self):
         return self.results
@@ -35,3 +37,6 @@ class ScannerResults:
     
     def getStartDateTimeRaw(self):
         return self.startDateTime
+
+    def getEndDateTimeRaw(self):
+        return self.endDateTime
