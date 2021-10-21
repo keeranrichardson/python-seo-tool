@@ -39,8 +39,10 @@ class HTMLReporter:
         duration = '{:02} hours, {:02} minutes, {:02} seconds'.format(hours, minutes, seconds)
         timeDifferenceLine = "<p>Duration of scan: {}</p>".format(duration)
 
-        numberOfUrlsFound = str(len(results))
-        numberOfUrlsFoundLine = "<p>Number of URLs found = {}</p>".format(numberOfUrlsFound)
+        numberOfUrlsFoundLine = "<p>Number of URLs found = {}</p>".format(len(results))
+
+        urlsScanned = self.scannerResult.getUrlsScanned()
+        urlsScannedLines = "<p>Number of URLs scanned = {}</p>".format(len(urlsScanned))
 
         middle = ""
 
@@ -54,5 +56,5 @@ class HTMLReporter:
             lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl)
             middle += lineInMiddle+"\n"
         
-        html = top+scannerStartDateLine+timeDifferenceLine+numberOfUrlsFoundLine+middle+bottom
+        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine + urlsScannedLines + middle + bottom
         return html

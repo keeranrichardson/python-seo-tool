@@ -11,6 +11,7 @@ class Scanner:
 
     def scan(self):
         if self.page.isUrlScannable():
+            self.results.addUrlScanned(self.url)
             for aLink in self.page.findLinks():
                 link = UrlScanner(aLink)
                 print(link.getStatus(), aLink)
@@ -24,6 +25,7 @@ class ScannerResults:
         self.results = []
         self.startDateTime = datetime.datetime.now()
         self.endDateTime = self.startDateTime
+        self.urlsScanned = []
 
     def add(self, urlResult):
         self.results.append(urlResult)
@@ -40,3 +42,9 @@ class ScannerResults:
 
     def getEndDateTimeRaw(self):
         return self.endDateTime
+
+    def addUrlScanned(self, url):
+        self.urlsScanned.append(url)
+        
+    def getUrlsScanned(self):
+        return self.urlsScanned
