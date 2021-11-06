@@ -1,24 +1,52 @@
+from requests.models import parse_url
 from webPage import WebPage
 from urlScanner import UrlScanner
 from urlResult import UrlResult
+from urllib.parse import urlparse
 import datetime
 
 class Scanner:
-    def __init__(self, url):
-        self.url = url
-        self.page = WebPage(self.url)
+    def __init__(self, url, restrictToDomain):
+        self.restrictToDomain = restrictToDomain
+        self.startingUrl = url
         self.results = ScannerResults()
-
+        self.urlsToScan = [self.startingUrl]
+        self.urlsScanned = []
+        self.urlsStatusChecked = []
+    
     def scan(self):
-        if self.page.isUrlScannable():
-            self.results.addUrlScanned(self.url)
-            for aLink in self.page.findLinks():
-                link = UrlScanner(aLink)
-                print(link.getStatus(), aLink)
-                self.results.add(UrlResult(aLink, link.getStatus(), self.url))
+        while len(self.urlsToScan) > 0:
+            urlToScan = self.urlsToScan.pop()
+            self.urlsScanned.append(urlToScan)  
+            self.scanPage(urlToScan)
+            
+
+    def scanPage(self, url):
+        webPage = WebPage(url)
+        if webPage.isUrlScannable():
+            self.results.addUrlScanned(url)
+            for aLink in webPage.findLinks():
+                if aLink in self.urlsStatusChecked:
+                    print("status checked already")
+                else:
+                    link = UrlScanner(aLink)
+                    if link.isScannable():
+                        self.addUrlToScan(aLink)
+                    print(link.getStatus(), aLink)
+                    self.results.add(UrlResult(aLink, link.getStatus(), url))
+                    self.urlsStatusChecked.append(aLink)
 
     def getResults(self):
         return self.results
+
+    def addUrlToScan(self, url):
+        parsedUrl = urlparse(url)
+        if url not in self.urlsScanned:
+            if self.restrictToDomain in parsedUrl.netloc:
+                self.urlsToScan.append(url)
+
+    def getUrlsToScan(self):
+        return self.urlsToScan
 
 class ScannerResults:
     def __init__(self):
@@ -48,3 +76,5 @@ class ScannerResults:
         
     def getUrlsScanned(self):
         return self.urlsScanned
+
+   

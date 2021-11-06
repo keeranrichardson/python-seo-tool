@@ -13,3 +13,9 @@ class UrlScanner:
         except:
             print("error reading "+ self.url)
             return "error"
+
+    def isScannable(self):
+        if self.getStatus() != 200:
+            return False
+        else:
+            return True

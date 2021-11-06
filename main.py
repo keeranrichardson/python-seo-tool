@@ -1,11 +1,14 @@
+from requests.models import parse_url
 from scanner import Scanner
 from htmlreporter import HTMLReporter
 from browserController import BrowserController
 from fileName import FileName
 from folderUtils import FolderUtils
+from urllib.parse import urlparse
 import os
 
-scanner = Scanner('https://keeranrichardson.com')
+parseUrl = urlparse('https://keeranrichardson.com')
+scanner = Scanner('https://keeranrichardson.com', parseUrl.netloc)
 scanner.scan()
 
 fileName = FileName().getHTMLReportFileName()
