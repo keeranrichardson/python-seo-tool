@@ -20,10 +20,8 @@ class HTMLReporter:
                         <h1>
                             Scan Results:
                         </h1>
-                        <ul>
                         '''
         bottom = '''
-                        </ul>
                     </body>
                 </html>'''
     
@@ -44,8 +42,22 @@ class HTMLReporter:
         urlsScanned = self.scannerResult.getUrlsScanned()
         urlsScannedLines = "<p>Number of URLs scanned = {}</p>".format(len(urlsScanned))
 
-        middle = ""
+        whichUrlsScannedLines = "<p>URLs scanned: </p>"
+        whichUrlsScannedLines += "<ul>"
+        for url in urlsScanned:
+            whichUrlsScannedLines += "<li><a href = '"+url+"' target='_blank'>"+url+"</a></li>"
+        whichUrlsScannedLines += "</ul>"
 
+
+        '''URLs scanned:
+            - https:// jfdka
+            - https:// fjksao
+            '''
+
+        middle = "<p>URLs found:</p>"
+
+        middle +="<ul>"
+    
         lineTemplate = "<li>{} {} [{}]</li>"
 
         for result in results:
@@ -56,5 +68,7 @@ class HTMLReporter:
             lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl)
             middle += lineInMiddle+"\n"
         
-        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine + urlsScannedLines + middle + bottom
+        middle +="</ul>"
+
+        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine + urlsScannedLines + whichUrlsScannedLines + middle + bottom
         return html
