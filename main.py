@@ -2,16 +2,24 @@ from requests.models import parse_url
 from scanner import Scanner
 from htmlreporter import HTMLReporter
 from browserController import BrowserController
-from fileName import FileName
+from configParams import ConfigParams
 from folderUtils import FolderUtils
 from urllib.parse import urlparse
 import os
 
-parseUrl = urlparse('https://keeranrichardson.com')
-scanner = Scanner('https://keeranrichardson.com', parseUrl.netloc)
+configParams = ConfigParams()
+configParams.getDefaultConfigParams()
+urlToParse = configParams.getUrlToParse()
+
+if urlToParse == '':
+    print("error: This tool needs a url to scan, you did not enter a url")
+    exit()
+
+parseUrl = urlparse(urlToParse)
+scanner = Scanner(urlToParse, parseUrl.netloc)
 scanner.scan()
 
-fileName = FileName().getHTMLReportFileName()
+fileName = configParams.getHTMLReportFileName()
 
 #creates directory
 directory = "reports"
