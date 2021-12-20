@@ -17,29 +17,39 @@ class Scanner:
         self.treatUrlsWithEndingSlashSameAsWithout = True 
     
     def scan(self):
-        while len(self.urlsToScan) > 0:
-            urlToScan = self.urlsToScan.pop()
-            self.urlsScanned.append(urlToScan)  
-            self.scanPage(urlToScan)
+        while self.isMoreToScan():
+            self.scanNext()
             
+    def isMoreToScan(self):
+        return len(self.urlsToScan) > 0
+
+    def scanNext(self):
+        urlToScan = self.urlsToScan.pop()
+        self.urlsScanned.append(urlToScan)  
+        return self.scanPage(urlToScan)
+        
 
     def scanPage(self, url):
+        events=[]
         webPage = WebPage(url)
         if webPage.isUrlScannable():
             self.results.addUrlScanned(url)
             for aLink in webPage.findLinks():
-                if aLink.endswith('/'):
-                    print("slash found")
                 if aLink in self.urlsStatusChecked:
-                    print("status checked already")
+                    print("status checked already", aLink)
+                    events.append("status checked already - "+str(aLink))
                 else:
                     link = UrlScanner(aLink)
                     if link.isScannable():
                         self.addUrlToScan(aLink)
                     print(link.getStatus(), aLink)
+                    events.append("status code: " + str(link.getStatus()) + " - " + str(aLink))
                     if not self.haveScannedAlready(aLink):
                         self.results.add(UrlResult(aLink, link.getStatus(), url))
                         self.urlsStatusChecked.append(aLink)
+        else:
+            events.append("status code: " + str(webPage.statusCode) + " - " +url)
+        return events
 
     def getResults(self):
         return self.results
