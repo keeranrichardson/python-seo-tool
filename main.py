@@ -7,6 +7,7 @@ from folderUtils import FolderUtils
 from urllib.parse import urlparse
 import os
 
+
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
