@@ -6,39 +6,49 @@ from configParams import ConfigParams
 from folderUtils import FolderUtils
 from urllib.parse import urlparse
 import os
-
+import tkinter as tk
+from tkinterGui import TkinterGui
 
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
 
-if urlToParse == '':
-    print("error: This tool needs a url to scan, you did not enter a url")
-    exit()
+if configParams.isGui():
+    gui = TkinterGui()
+    gui.showGui()
+else:
+    if urlToParse == '':
+        urlToParse= str(input("enter the url to scan: "))
 
-parseUrl = urlparse(urlToParse)
-scanner = Scanner(urlToParse, parseUrl.netloc)
-scanner.scan()
+    if urlToParse == '':
+        print("error: This tool needs a url to scan, you did not enter a url")
+        exit()
 
-fileName = configParams.getHTMLReportFileName()
+    configParams.setUrl(urlToParse)
 
-#creates directory
-directory = "reports"
+    parseUrl = urlparse(urlToParse)
+    scanner = Scanner(urlToParse, parseUrl.netloc)
+    scanner.scan()
 
-reportsFolder = FolderUtils(directory)
-reportsFolder.createCWDFolder()
-path = reportsFolder.getCWDPath()
+    fileName = configParams.getHTMLReportFileName()
 
-#creates full directory
-pathAndFileName = os.path.join(path, fileName)
+    #creates directory
+    directory = "reports"
 
-#writes report to file
-file = open(pathAndFileName, "w")
-file.write(HTMLReporter(scanner.getResults()).makeReport())
-file.close()
+    reportsFolder = FolderUtils(directory)
+    reportsFolder.createCWDFolder()
+    path = reportsFolder.getCWDPath()
+
+    #creates full directory
+    pathAndFileName = os.path.join(path, fileName)
+
+    #writes report to file
+    file = open(pathAndFileName, "w")
+    file.write(HTMLReporter(scanner.getResults()).makeReport())
+    file.close()
 
 
 
-BrowserController().open(pathAndFileName)
+    BrowserController().open(pathAndFileName)
 
-#todos
+    #todos

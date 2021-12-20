@@ -2,6 +2,11 @@ import datetime
 import re
 import argparse
 
+# read prameters from command line with defaults if parameters are missing eg:
+# python main.py -url https://keeranrichardson.com -cmd true
+# or
+# python main.py -url https://keeranrichardson.com -cmd=True 
+
 class ConfigParams:
     def __init__(self):
         self.vargs = {}
@@ -23,7 +28,7 @@ class ConfigParams:
         if self.vargs["url"] is not None:
             urlToReturn = self.vargs["url"]
         else:
-            urlToReturn = str(input("enter the url to scan: "))
+            urlToReturn = ''
 
         return urlToReturn.strip()
 
@@ -36,6 +41,7 @@ class ConfigParams:
         parser = argparse.ArgumentParser(description='Scan site for URLs')
         parser.add_argument('-url', help='the url to scan')
         parser.add_argument('-filename', default=self.getCurrentDateString(), help='the filename of the html report output file')
+        parser.add_argument('-cmd', default=False, help='run the program from the command line')
 
         self.args = parser.parse_args()
         self.vargs = vars(self.args)
@@ -56,6 +62,13 @@ class ConfigParams:
             fileName = self.getCurrentDateString()+'.html'
 
         return fileName
+
+    def isGui(self):
+        return not self.vargs["cmd"]
+
+    def setUrl(self, urlToParse):
+        self.vargs["url"] = urlToParse
+
         
 
 
