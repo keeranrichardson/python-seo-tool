@@ -24,7 +24,6 @@ class TkinterGui:
         self.showLogs=scrolledtext.ScrolledText(self.window, height = 5)
         #self.showLogs.see(tk.END)
         self.showLogs.pack()
-        
 
         btn2=tk.Button(self.window, text="show report")
         btn2.pack()
