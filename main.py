@@ -47,8 +47,6 @@ else:
     file.write(HTMLReporter(scanner.getResults()).makeReport())
     file.close()
 
-
-
     BrowserController().open(pathAndFileName)
 
     #todos

@@ -2,6 +2,7 @@ import tkinter as tk
 from scanner import Scanner
 from urllib.parse import urlparse
 from tkinter import messagebox
+import tkinter.scrolledtext as scrolledtext
 
 
 class TkinterGui:
@@ -20,8 +21,10 @@ class TkinterGui:
         self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
         self.startScanBtn.pack()
 
-        self.showLogs=tk.Text(self.window, height = 5)
+        self.showLogs=scrolledtext.ScrolledText(self.window, height = 5)
+        #self.showLogs.see(tk.END)
         self.showLogs.pack()
+        
 
         btn2=tk.Button(self.window, text="show report")
         btn2.pack()
@@ -48,11 +51,14 @@ class TkinterGui:
             eventLog = self.scanner.scanNext()
             # update gui
             for event in eventLog:
-                self.showLogs.insert(tk.END, event+"\n")
+                self.showLogs.see(tk.END)
+                self.showLogs.insert(tk.END, event+"\n") 
+                               
             self.window.after(1000, self.continueScan)
         
         else:
             self.startScanBtn["state"] = "normal"
+            self.showLogs.see(tk.END)
 
 
 
