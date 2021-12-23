@@ -28,6 +28,11 @@ class TkinterGui:
         self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500)
         self.rateLimitMenu.pack()
 
+        tk.Label(text="Enter file name of HTML report:").pack()
+
+        self.enterPath=tk.Entry(self.window)
+        self.enterPath.pack()
+
         self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
         self.startScanBtn.pack()
 
@@ -42,6 +47,7 @@ class TkinterGui:
         self.window.mainloop()
 
     def startScan(self):
+        self.configParams.vargs["filename"] = self.enterPath.get()
         urlToParse = self.getUrlToParse()
         urlValidator = ValidateUrl(urlToParse)
 
