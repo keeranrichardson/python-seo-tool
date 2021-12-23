@@ -18,6 +18,13 @@ class TkinterGui:
         self.txtfld=tk.Entry(self.window)
         self.txtfld.pack()
 
+        tk.Label(text="Select rate limiting value (milliseconds):").pack()
+
+        self.rateLimitValue = tk.IntVar()
+        self.rateLimitValue.set(1000)
+        self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500)
+        self.rateLimitMenu.pack()
+
         self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
         self.startScanBtn.pack()
 
@@ -53,7 +60,7 @@ class TkinterGui:
                 self.showLogs.see(tk.END)
                 self.showLogs.insert(tk.END, event+"\n") 
                                
-            self.window.after(1000, self.continueScan)
+            self.window.after(self.rateLimitValue.get(), self.continueScan)
         
         else:
             self.startScanBtn["state"] = "normal"
