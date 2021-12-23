@@ -3,15 +3,18 @@ from scanner import Scanner
 from urllib.parse import urlparse
 from tkinter import messagebox
 import tkinter.scrolledtext as scrolledtext
+from reportGenerator import ReportGenerator
+from browserController import BrowserController
 
 
 class TkinterGui:
-    def __init__(self):
-        ''
+    def __init__(self, configParams):
+        self.configParams = configParams
+
     def showGui(self):
         self.window = tk.Tk()
         self.window.title('link checker')
-        self.window.geometry("300x200+10+10")
+        #self.window.geometry("300x200+10+10")
 
         tk.Label(text="Enter URL:").pack()
 
@@ -32,8 +35,9 @@ class TkinterGui:
         #self.showLogs.see(tk.END)
         self.showLogs.pack()
 
-        btn2=tk.Button(self.window, text="show report")
-        btn2.pack()
+        self.btn2=tk.Button(self.window, text="open report", command = self.openReport)
+        self.btn2.pack()
+        self.btn2["state"] = "disabled"
 
         self.window.mainloop()
 
@@ -50,6 +54,7 @@ class TkinterGui:
         self.scanner = Scanner(urlToParse, parseUrl.netloc)
         #scanner.scan()
         self.startScanBtn["state"] = "disabled"
+        self.btn2["state"] = "disabled"
         self.continueScan()
 
     def continueScan(self):
@@ -64,9 +69,16 @@ class TkinterGui:
         
         else:
             self.startScanBtn["state"] = "normal"
+            self.btn2["state"] = "normal"
             self.showLogs.see(tk.END)
+            self.generateReport()
 
+    def openReport(self):
+        BrowserController().open(self.report.getPathAndFileName())
 
+    def generateReport(self):
+        self.report = ReportGenerator(self.configParams, self.scanner)
+        self.report.generateReport()
 
     def getUrlToParse(self):
         return self.txtfld.get()

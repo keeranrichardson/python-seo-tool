@@ -8,13 +8,14 @@ from urllib.parse import urlparse
 import os
 import tkinter as tk
 from tkinterGui import TkinterGui
+from reportGenerator import ReportGenerator
 
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
 
 if configParams.isGui():
-    gui = TkinterGui()
+    gui = TkinterGui(configParams)
     gui.showGui()
 else:
     if urlToParse == '':
@@ -29,24 +30,10 @@ else:
     parseUrl = urlparse(urlToParse)
     scanner = Scanner(urlToParse, parseUrl.netloc)
     scanner.scan()
+    
+    report = ReportGenerator(configParams, scanner)
+    report.generateReport()
 
-    fileName = configParams.getHTMLReportFileName()
-
-    #creates directory
-    directory = "reports"
-
-    reportsFolder = FolderUtils(directory)
-    reportsFolder.createCWDFolder()
-    path = reportsFolder.getCWDPath()
-
-    #creates full directory
-    pathAndFileName = os.path.join(path, fileName)
-
-    #writes report to file
-    file = open(pathAndFileName, "w")
-    file.write(HTMLReporter(scanner.getResults()).makeReport())
-    file.close()
-
-    BrowserController().open(pathAndFileName)
+    BrowserController().open(report.getPathAndFileName())
 
     #todos
