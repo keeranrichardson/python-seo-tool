@@ -77,6 +77,7 @@ class TkinterGui:
             for event in eventLog:
                 self.showLogs.see(tk.END)
                 self.showLogs.insert(tk.END, event+"\n") 
+                self.showLogs.see(tk.END)
                                
             self.window.after(self.rateLimitValue.get(), self.continueScan)
         
