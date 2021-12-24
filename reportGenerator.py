@@ -10,14 +10,10 @@ class ReportGenerator:
 
     def generateReport(self):
         fileName = self.configParams.getHTMLReportFileName()
+        path = self.getPath()
 
-        #creates directory
-        directory = "reports"
-
-        reportsFolder = FolderUtils(directory)
-        reportsFolder.createCWDFolder()
-        path = reportsFolder.getCWDPath()
-
+        FolderUtils().createFolderIfNotExists(path)
+        
         #creates full directory
         self.pathAndFileName = os.path.join(path, fileName)
 
@@ -28,3 +24,15 @@ class ReportGenerator:
 
     def getPathAndFileName(self):
         return self.pathAndFileName
+
+    def getPath(self):
+        path = self.configParams.getReportPath()
+
+        if path == '':
+            #creates directory
+            directory = "reports"
+
+            reportsFolder = FolderUtils()
+            path = reportsFolder.getCWDPath(directory)
+
+        return path

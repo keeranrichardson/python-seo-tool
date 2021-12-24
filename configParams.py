@@ -42,6 +42,7 @@ class ConfigParams:
         parser.add_argument('-url', help='the url to scan')
         parser.add_argument('-filename', default=self.getCurrentDateString(), help='the filename of the html report output file')
         parser.add_argument('-cmd', default=False, help='run the program from the command line')
+        parser.add_argument('-reportPath', default='', help='path where HTML report will be stored')
 
         self.args = parser.parse_args()
         self.vargs = vars(self.args)
@@ -68,6 +69,15 @@ class ConfigParams:
 
     def setUrl(self, urlToParse):
         self.vargs["url"] = urlToParse
+
+    def getReportPath(self):
+        return self.vargs["reportPath"]
+
+    def setReportPath(self, newPath):
+        self.vargs["reportPath"] = newPath
+
+    def setReportFileName(self, newFileName):
+        self.vargs["filename"] = newFileName
 
         
 

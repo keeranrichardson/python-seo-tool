@@ -5,6 +5,7 @@ from tkinter import messagebox
 import tkinter.scrolledtext as scrolledtext
 from reportGenerator import ReportGenerator
 from browserController import BrowserController
+from tkinter import filedialog
 
 
 class TkinterGui:
@@ -24,14 +25,20 @@ class TkinterGui:
         tk.Label(text="Select rate limiting value (milliseconds):").pack()
 
         self.rateLimitValue = tk.IntVar()
-        self.rateLimitValue.set(1000)
-        self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500)
+        self.rateLimitValue.set(0)
+        self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500, 0)
         self.rateLimitMenu.pack()
 
         tk.Label(text="Enter file name of HTML report:").pack()
 
         self.enterPath=tk.Entry(self.window)
         self.enterPath.pack()
+
+        self.choosePathButton = tk.Button(self.window, text = "select path for HTML report", command = self.choosePath)
+        self.choosePathButton.pack()
+
+        self.pathLabel = tk.Label(text="Path for HTML report = "+self.getCurrentHTMLReportPath())
+        self.pathLabel.pack()
 
         self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
         self.startScanBtn.pack()
@@ -47,7 +54,7 @@ class TkinterGui:
         self.window.mainloop()
 
     def startScan(self):
-        self.configParams.vargs["filename"] = self.enterPath.get()
+        self.configParams.setReportFileName(self.enterPath.get()) 
         urlToParse = self.getUrlToParse()
         urlValidator = ValidateUrl(urlToParse)
 
@@ -91,6 +98,17 @@ class TkinterGui:
 
     def showErrorMessage(self, errorMessage):
         tk.messagebox.showerror(title = "error", message = errorMessage)
+
+    def choosePath(self):
+        reportPath = filedialog.askdirectory()
+        if len(reportPath) == 0:
+            return
+
+        self.configParams.setReportPath(reportPath)
+        self.pathLabel.config(text = "Path for HTML report = "+self.getCurrentHTMLReportPath())
+
+    def getCurrentHTMLReportPath(self):
+        return ReportGenerator(self.configParams, None).getPath()
 
 class ValidateUrl:
     def __init__(self, url):
