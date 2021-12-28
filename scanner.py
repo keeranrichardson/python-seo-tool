@@ -10,9 +10,12 @@ class Scanner:
         self.restrictToDomain = restrictToDomain
         self.startingUrl = url
         self.results = ScannerResults()
-        self.urlsToScan = [self.startingUrl]
+        #self.urlsToScan = [self.startingUrl]
+        self.urlsToScan = [UrlResult(self.startingUrl, 0, self.startingUrl)]
         self.urlsScanned = []
         self.urlsStatusChecked = []
+        #self.urlsToCrawl = []
+        #self.urlsCrawled = []
         #config
         self.treatUrlsWithEndingSlashSameAsWithout = True 
     
@@ -23,13 +26,63 @@ class Scanner:
     def isMoreToScan(self):
         return len(self.urlsToScan) > 0
 
+    
     def scanNext(self):
-        urlToScan = self.urlsToScan.pop()
+        urlToScan = self.getNextURLToScan()
         self.urlsScanned.append(urlToScan)  
         return self.scanPage(urlToScan)
-        
 
-    def scanPage(self, url):
+    def getNextURLToScan(self):
+        if self.isMoreToScan():
+            return self.urlsToScan.pop()
+        return None
+
+    def getNextURLToCrawl(self):
+        ''
+
+    def crawlURL(self, url):
+        webPage = WebPage(url)
+        links = webPage.findLinks()
+        return links 
+
+    # processing URL
+    # check status code for URL to see if 2XX
+    # check url to see if it should be scanned
+    # get all links on page of URL
+    # each link becomes processing URL
+    def scanPage(self, urlResult):
+        events=[]
+        webPage = WebPage(urlResult.getURL())
+        if webPage.isUrlScannable():
+            self.results.addUrlScanned(urlResult.getURL())
+            urlResult.setStatusCode(webPage.statusCode)
+            self.results.addResult(urlResult)
+
+            if self.isAllowedToBeCrawled(urlResult.getURL()):
+                # do not add if already checked
+                for aLink in webPage.findLinks():
+                    if not self.haveScannedAlready(aLink) and not aLink in self.urlsStatusChecked:
+                        self.urlsToScan.append(UrlResult(aLink, 0, urlResult.getURL()))
+
+ #           for aLink in webPage.findLinks():
+ #               if aLink in self.urlsStatusChecked:
+ #                   print("status checked already", aLink)
+ #                   events.append("status checked already - "+str(aLink))
+ #               else:
+ #                   link = UrlScanner(aLink)
+ #                   if link.isScannable():
+ #                       self.addUrlToScan(aLink)
+ #                   print(link.getStatus(), aLink)
+ #                   events.append("status code: " + str(link.getStatus()) + " - " + str(aLink))
+ #                   if not self.haveScannedAlready(aLink):
+ #                       self.results.addResult(UrlResult(aLink, link.getStatus(), url))
+ #                       self.urlsStatusChecked.append(aLink)
+
+        self.urlsStatusChecked.append(urlResult.getURL())
+        events.append("status code: " + str(webPage.statusCode) + " - " + urlResult.getURL())
+        return events
+
+    def oldScanPage(self, url):
         events=[]
         webPage = WebPage(url)
         if webPage.isUrlScannable():
@@ -45,7 +98,7 @@ class Scanner:
                     print(link.getStatus(), aLink)
                     events.append("status code: " + str(link.getStatus()) + " - " + str(aLink))
                     if not self.haveScannedAlready(aLink):
-                        self.results.add(UrlResult(aLink, link.getStatus(), url))
+                        self.results.addResult(UrlResult(aLink, link.getStatus(), url))
                         self.urlsStatusChecked.append(aLink)
         else:
             events.append("status code: " + str(webPage.statusCode) + " - " +url)
@@ -69,7 +122,7 @@ class Scanner:
             return False
         return True
 
-    def isAllowedToBeScanned(self, url):
+    def isAllowedToBeCrawled(self, url):
         parsedUrl = urlparse(url)
         if self.restrictToDomain in parsedUrl.netloc:
                 return True
@@ -78,12 +131,12 @@ class Scanner:
 
 class ScannerResults:
     def __init__(self):
-        self.results = []
+        self.results = [] # UrlResult Array
         self.startDateTime = datetime.datetime.now()
         self.endDateTime = self.startDateTime
-        self.urlsScanned = []
+        self.urlsScanned = [] # String Array
 
-    def add(self, urlResult):
+    def addResult(self, urlResult):
         self.results.append(urlResult)
         self.endDateTime = datetime.datetime.now()
 

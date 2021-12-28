@@ -79,7 +79,7 @@ class TkinterGui:
                 self.showLogs.insert(tk.END, event+"\n") 
                 self.showLogs.see(tk.END)
                                
-            self.window.after(self.rateLimitValue.get(), self.continueScan)
+            self.window.after(self.rateLimitValue.get()+1, self.continueScan)
         
         else:
             self.startScanBtn["state"] = "normal"

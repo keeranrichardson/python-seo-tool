@@ -10,6 +10,9 @@ class UrlResult:
 
     def getStatusCode(self):
         return self.statusCode
+        
+    def setStatusCode(self, aStatusCode):
+        self.statusCode = aStatusCode
 
     def getParentUrl(self):
         return self.parentUrl

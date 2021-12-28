@@ -14,8 +14,6 @@ class WebPage:
             print("can't find the links for "+ self.url+ " because status code = "+ str(self.statusCode))
             return False
 
-        self.html = requests.get(self.url).text
-        self.soup = BeautifulSoup(self.html, "html.parser")
 
         return True
 
@@ -24,6 +22,9 @@ class WebPage:
 
     def findLinks(self):
         self.urlsFound = []
+
+        self.html = requests.get(self.url).text
+        self.soup = BeautifulSoup(self.html, "html.parser")
         
         for link in self.soup.find_all('a'):
             href = link.get('href')
