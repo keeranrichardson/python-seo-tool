@@ -43,4 +43,9 @@ class WebPage:
         
         return self.imagesFound
 
+    def getStatusCode(self):
+        return self.statusCode
+
+    def getURL(self):
+        return self.url
     

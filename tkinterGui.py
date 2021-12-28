@@ -65,7 +65,6 @@ class TkinterGui:
         parseUrl = urlparse(urlToParse)
         #todo: add url validation, needs to have netloc and scheme
         self.scanner = Scanner(urlToParse, parseUrl.netloc)
-        #scanner.scan()
         self.startScanBtn["state"] = "disabled"
         self.btn2["state"] = "disabled"
         self.continueScan()
@@ -78,8 +77,13 @@ class TkinterGui:
                 self.showLogs.see(tk.END)
                 self.showLogs.insert(tk.END, event+"\n") 
                 self.showLogs.see(tk.END)
-                               
-            self.window.after(self.rateLimitValue.get()+1, self.continueScan)
+
+            # tkinter does not update the GUI when rate limit is 0
+            rateLimitValue = self.rateLimitValue.get()  
+            if rateLimitValue < 1:
+                rateLimitValue = 1       
+
+            self.window.after(rateLimitValue, self.continueScan)
         
         else:
             self.startScanBtn["state"] = "normal"

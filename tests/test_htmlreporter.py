@@ -1,5 +1,5 @@
 from htmlreporter import HTMLReporter
-from scanner import ScannerResults
+from scannerResults import ScannerResults
 from urlResult import UrlResult
 
 class TestHTMLReporter:
