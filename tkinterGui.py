@@ -75,7 +75,8 @@ class TkinterGui:
             # update gui
             for event in eventLog:
                 self.showLogs.see(tk.END)
-                self.showLogs.insert(tk.END, event+"\n") 
+                self.showLogs.insert(tk.END, event+"\n")
+                print(event) 
                 self.showLogs.see(tk.END)
 
             # tkinter does not update the GUI when rate limit is 0

@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin
+from urllib.parse import urlparse
 from urlScanner import UrlScanner
 
 class WebPage:
@@ -25,7 +26,12 @@ class WebPage:
         return True
 
     def getRedirectLocation(self):
-        return self.urlScanner.getLocation()
+        redirectLocation = self.urlScanner.getLocation()
+        parsedUrl = urlparse(redirectLocation)
+        if parsedUrl.scheme == '':
+            redirectLocation = self.makeFullUrl(self.url, redirectLocation)
+
+        return redirectLocation
 
     def makeFullUrl(self, base, end):
         return urljoin(base, end)

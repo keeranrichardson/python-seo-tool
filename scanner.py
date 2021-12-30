@@ -21,7 +21,9 @@ class Scanner:
     
     def scan(self):
         while self.isMoreToScan():
-            self.scanNext()
+            events = self.scanNext()
+            for event in events:
+                print(event)
             
     def isMoreToScan(self):
         return len(self.urlsToScan) > 0
@@ -60,7 +62,8 @@ class Scanner:
             self.results.addUrlScanned(webPageUrl)
             urlResult.setStatusCode(webPage.getStatusCode())
             self.results.addResult(urlResult)
-
+        
+            # todo: refactor to remove duplicate code
             if urlResult.statusCode in [301, 302]:
                 # add loxation to urlresult
                 urlResult.setRedirectLocation(webPage.getRedirectLocation())
