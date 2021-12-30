@@ -61,20 +61,33 @@ class Scanner:
             urlResult.setStatusCode(webPage.getStatusCode())
             self.results.addResult(urlResult)
 
-            if self.isAllowedToBeCrawled(webPageUrl):
-                # do not add if already checked
-                links = webPage.findLinks()
-                events.append("found " + str(len(links)) + " links on " + webPageUrl)
-                linksToProcess = 0
+            if urlResult.statusCode in [301, 302]:
+                # add loxation to urlresult
+                urlResult.setRedirectLocation(webPage.getRedirectLocation())
+                aLink = webPage.getRedirectLocation()
+                events.append(webPageUrl + " redirects to: " + aLink)
+                # follow like normal link
+                sanitisedALink = self.sanitiseURL(aLink)
+                if self.shouldAddToScanQueue(sanitisedALink):
+                    self.urlsToScan.append(UrlResult(sanitisedALink, 0, webPageUrl))
+                    self.urlsFound.append(sanitisedALink)
+                events.append("number of links to scan: 1 on " + webPageUrl)
 
-                for aLink in links:
-                    sanitisedALink = self.sanitiseURL(aLink)
-                    if self.shouldAddToScanQueue(sanitisedALink):
-                        linksToProcess += 1
-                        self.urlsToScan.append(UrlResult(sanitisedALink, 0, webPageUrl))
-                        self.urlsFound.append(sanitisedALink)
+            else:
+                if self.isAllowedToBeCrawled(webPageUrl):
+                    # do not add if already checked
+                    links = webPage.findLinks()
+                    events.append("found " + str(len(links)) + " links on " + webPageUrl)
+                    linksToProcess = 0
 
-                events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
+                    for aLink in links:
+                        sanitisedALink = self.sanitiseURL(aLink)
+                        if self.shouldAddToScanQueue(sanitisedALink):
+                            linksToProcess += 1
+                            self.urlsToScan.append(UrlResult(sanitisedALink, 0, webPageUrl))
+                            self.urlsFound.append(sanitisedALink)
+
+                    events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
 
         self.urlsStatusChecked.append(webPageUrl)
         events.append("status code: " + str(webPage.getStatusCode()) + " - " + webPageUrl)

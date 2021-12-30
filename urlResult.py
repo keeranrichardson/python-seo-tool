@@ -16,3 +16,9 @@ class UrlResult:
 
     def getParentUrl(self):
         return self.parentUrl
+
+    def setRedirectLocation(self, location):
+        self.redirectLocation = location
+
+    
+

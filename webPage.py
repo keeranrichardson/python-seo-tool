@@ -6,16 +6,26 @@ from urlScanner import UrlScanner
 class WebPage:
     def __init__(self, url):
         self.url = url
+        self.urlScanner = UrlScanner(self.url)
 
     def isUrlScannable(self):
-        self.statusCode = UrlScanner(self.url).getStatus()
+        self.statusCode = self.urlScanner.getStatus()
 
-        if self.statusCode != 200:
+        validStatusCodes = [
+                            200,    # OK
+                            301,    # Permanent redirect
+                            302     # Temporary redirect
+                            ]
+
+        if self.statusCode not in validStatusCodes:
             print("can't find the links for "+ self.url+ " because status code = "+ str(self.statusCode))
             return False
 
 
         return True
+
+    def getRedirectLocation(self):
+        return self.urlScanner.getLocation()
 
     def makeFullUrl(self, base, end):
         return urljoin(base, end)
@@ -23,7 +33,7 @@ class WebPage:
     def findLinks(self):
         self.urlsFound = []
 
-        self.html = requests.get(self.url).text
+        self.html = requests.get(self.url, allow_redirects=False).text
         self.soup = BeautifulSoup(self.html, "html.parser")
         
         for link in self.soup.find_all('a'):
