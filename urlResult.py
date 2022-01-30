@@ -4,6 +4,7 @@ class UrlResult:
         self.url = url
         self.statusCode = statusCode
         self.parentUrl = parentUrl
+        self.redirectLocation = None
 
     def getURL(self):
         return self.url
@@ -19,6 +20,9 @@ class UrlResult:
 
     def setRedirectLocation(self, location):
         self.redirectLocation = location
+
+    def getRedirectLocation(self):
+        return self.redirectLocation
 
     
 

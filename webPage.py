@@ -15,7 +15,9 @@ class WebPage:
         validStatusCodes = [
                             200,    # OK
                             301,    # Permanent redirect
-                            302     # Temporary redirect
+                            302,    # Temporary redirect
+                            307,
+                            308
                             ]
 
         if self.statusCode not in validStatusCodes:

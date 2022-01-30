@@ -64,7 +64,7 @@ class Scanner:
             self.results.addResult(urlResult)
         
             # todo: refactor to remove duplicate code
-            if urlResult.statusCode in [301, 302]:
+            if urlResult.statusCode in [301, 302, 307, 308]:
                 # add loxation to urlresult
                 urlResult.setRedirectLocation(webPage.getRedirectLocation())
                 aLink = webPage.getRedirectLocation()

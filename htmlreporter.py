@@ -58,14 +58,18 @@ class HTMLReporter:
 
         middle +="<ul>"
     
-        lineTemplate = "<li>{} {} [{}]</li>"
+        lineTemplate = "<li>{} {} [{}] {}</li>"
 
         for result in results:
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
             parentUrl = self.aTag(result.getParentUrl(), "parent page")
+            if result.getRedirectLocation() != None:
+                redirectsTo = "Redirects to: "+self.aTag(result.getRedirectLocation(), result.getRedirectLocation())
+            else:
+                redirectsTo = ""
 
-            lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl)
+            lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl, redirectsTo)
             middle += lineInMiddle+"\n"
         
         middle +="</ul>"
