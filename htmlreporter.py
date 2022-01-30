@@ -60,7 +60,14 @@ class HTMLReporter:
     
         lineTemplate = "<li>{} {} [{}] {}</li>"
 
+        statusCodeLinks = {}
+
         for result in results:
+            statusCode = result.getStatusCode()
+            if str(statusCode) not in statusCodeLinks:
+                statusCodeLinks[str(statusCode)] = ""
+
+            
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
             parentUrl = self.aTag(result.getParentUrl(), "parent page")
@@ -71,8 +78,17 @@ class HTMLReporter:
 
             lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl, redirectsTo)
             middle += lineInMiddle+"\n"
+            statusCodeLinks[str(statusCode)] = statusCodeLinks[str(statusCode)] + lineInMiddle+"\n"
         
         middle +="</ul>"
+
+        for statusCode in statusCodeLinks:
+            middle += "\n<p>"+statusCode+"s:</p>\n"
+            middle +="<ul>"
+            middle += statusCodeLinks[statusCode]
+            middle +="</ul>"
+
+        
 
         html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine + urlsScannedLines + whichUrlsScannedLines + middle + bottom
         return html
