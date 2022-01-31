@@ -6,8 +6,6 @@ from urllib.parse import urlparse
 import datetime
 from scannerResults import ScannerResults
 
-#make everything work with dictionaries
-
 class Scanner:
     def __init__(self, url, restrictToDomain):
         self.treatUrlsWithEndingSlashSameAsWithout = True 
