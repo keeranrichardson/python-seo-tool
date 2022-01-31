@@ -6,17 +6,19 @@ from urllib.parse import urlparse
 import datetime
 from scannerResults import ScannerResults
 
+#make everything work with dictionaries
+
 class Scanner:
     def __init__(self, url, restrictToDomain):
         self.treatUrlsWithEndingSlashSameAsWithout = True 
         self.restrictToDomain = restrictToDomain
         self.startingUrl = url
         self.results = ScannerResults()
-        self.urlsToScan = [UrlResult(self.sanitiseURL(self.startingUrl), 0, self.sanitiseURL(self.startingUrl))]
-        self.urlsScanned = []
-        self.urlsStatusChecked = []
-        self.urlsFound = [self.sanitiseURL(self.startingUrl)]
-        #config
+        urlResultHomePage = UrlResult(self.sanitiseURL(self.startingUrl), 0, self.sanitiseURL(self.startingUrl))
+        self.urlsToScan = [urlResultHomePage]
+        self.urlsScanned = {}
+        self.urlsStatusChecked = {}
+        self.urlsFound = {self.sanitiseURL(self.startingUrl):urlResultHomePage}
         
     
     def scan(self):
@@ -31,7 +33,7 @@ class Scanner:
     
     def scanNext(self):
         urlToScan = self.getNextURLToScan()
-        self.urlsScanned.append(urlToScan)  
+        self.urlsScanned[self.sanitiseURL(urlToScan.getURL())] = urlToScan  
         return self.scanPage(urlToScan)
 
     def getNextURLToScan(self):
@@ -72,8 +74,9 @@ class Scanner:
                 # follow like normal link
                 sanitisedALink = self.sanitiseURL(aLink)
                 if self.shouldAddToScanQueue(sanitisedALink):
-                    self.urlsToScan.append(UrlResult(sanitisedALink, 0, webPageUrl))
-                    self.urlsFound.append(sanitisedALink)
+                    result = UrlResult(sanitisedALink, 0, webPageUrl)
+                    self.urlsToScan.append(result)
+                    self.urlsFound[sanitisedALink] = result
                 events.append("number of links to scan: 1 on " + webPageUrl)
 
             else:
@@ -87,12 +90,15 @@ class Scanner:
                         sanitisedALink = self.sanitiseURL(aLink)
                         if self.shouldAddToScanQueue(sanitisedALink):
                             linksToProcess += 1
-                            self.urlsToScan.append(UrlResult(sanitisedALink, 0, webPageUrl))
-                            self.urlsFound.append(sanitisedALink)
+                            result = UrlResult(sanitisedALink, 0, webPageUrl)
+                            self.urlsToScan.append(result)
+                            self.urlsFound[sanitisedALink] = result
+                        #else:
+                            #add parent link to urlresult object
 
                     events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
 
-        self.urlsStatusChecked.append(webPageUrl)
+        self.urlsStatusChecked[webPageUrl] = urlResult
         events.append("status code: " + str(webPage.getStatusCode()) + " - " + webPageUrl)
         return events
 
@@ -107,10 +113,6 @@ class Scanner:
         if url in self.urlsFound:
             return False
         return True
-
-    def addUrlToScan(self, url):
-        if not self.haveScannedAlready(url) and self.isAllowedToBeScanned(url):
-            self.urlsToScan.append(url)
 
     def sanitiseURL(self, url):
         if self.treatUrlsWithEndingSlashSameAsWithout:
