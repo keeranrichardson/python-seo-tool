@@ -3,7 +3,7 @@ class UrlResult:
     def __init__(self, url, statusCode, parentUrl):
         self.url = url
         self.statusCode = statusCode
-        self.parentUrl = parentUrl
+        self.parentUrls = [parentUrl]
         self.redirectLocation = None
 
     def getURL(self):
@@ -16,13 +16,20 @@ class UrlResult:
         self.statusCode = aStatusCode
 
     def getParentUrl(self):
-        return self.parentUrl
+        return self.parentUrls[0]
+
+    def getParentUrls(self):
+        return self.parentUrls
 
     def setRedirectLocation(self, location):
         self.redirectLocation = location
 
     def getRedirectLocation(self):
         return self.redirectLocation
+
+    def addParentUrl(self, url):
+        self.parentUrls.append(url)
+
 
     
 

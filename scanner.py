@@ -8,11 +8,17 @@ from scannerResults import ScannerResults
 
 class Scanner:
     def __init__(self, url, restrictToDomain):
+        # config for handling urls with slash at end
         self.treatUrlsWithEndingSlashSameAsWithout = True 
+        # the domain we are restricting the scan to
         self.restrictToDomain = restrictToDomain
+        # the url we start the scan with
         self.startingUrl = url
+        # the results from the scan
         self.results = ScannerResults()
+        # creating the first object to add to the queue
         urlResultHomePage = UrlResult(self.sanitiseURL(self.startingUrl), 0, self.sanitiseURL(self.startingUrl))
+        # the queues for tracking the url states in the scan
         self.urlsToScan = [urlResultHomePage]
         self.urlsScanned = {}
         self.urlsStatusChecked = {}
@@ -70,11 +76,18 @@ class Scanner:
                 aLink = webPage.getRedirectLocation()
                 events.append(webPageUrl + " redirects to: " + aLink)
                 # follow like normal link
+
+                self.addUrlToScanAndFoundQueues(aLink, webPageUrl)
+                '''
                 sanitisedALink = self.sanitiseURL(aLink)
                 if self.shouldAddToScanQueue(sanitisedALink):
                     result = UrlResult(sanitisedALink, 0, webPageUrl)
                     self.urlsToScan.append(result)
                     self.urlsFound[sanitisedALink] = result
+                else:
+                    # add parent link to urlresult object
+                    result = self.getUrlFromQueue(sanitisedALink)
+                    result.addParentUrl(webPageUrl)'''
                 events.append("number of links to scan: 1 on " + webPageUrl)
 
             else:
@@ -85,20 +98,43 @@ class Scanner:
                     linksToProcess = 0
 
                     for aLink in links:
-                        sanitisedALink = self.sanitiseURL(aLink)
+                        if self.addUrlToScanAndFoundQueues(aLink, webPageUrl):
+                            linksToProcess += 1
+                        '''sanitisedALink = self.sanitiseURL(aLink)
                         if self.shouldAddToScanQueue(sanitisedALink):
                             linksToProcess += 1
                             result = UrlResult(sanitisedALink, 0, webPageUrl)
                             self.urlsToScan.append(result)
                             self.urlsFound[sanitisedALink] = result
-                        #else:
-                            #add parent link to urlresult object
+                        else:
+                            # add parent link to urlresult object
+                            result = self.getUrlFromQueue(sanitisedALink)
+                            result.addParentUrl(webPageUrl)'''
 
                     events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
 
         self.urlsStatusChecked[webPageUrl] = urlResult
         events.append("status code: " + str(webPage.getStatusCode()) + " - " + webPageUrl)
         return events
+    
+    def addUrlToScanAndFoundQueues(self, aLink, webPageUrl):
+        sanitisedALink = self.sanitiseURL(aLink)
+        if self.shouldAddToScanQueue(sanitisedALink):
+            result = UrlResult(sanitisedALink, 0, webPageUrl)
+            self.urlsToScan.append(result)
+            self.urlsFound[sanitisedALink] = result
+            return True
+        else:
+            # add parent link to urlresult object
+            result = self.getUrlFromQueue(sanitisedALink)
+            result.addParentUrl(webPageUrl)
+            return False
+
+    def getUrlFromQueue(self, url):
+        try:
+            return self.urlsFound[self.sanitiseURL(url)]
+        except:
+            return None
 
     def getResults(self):
         return self.results
