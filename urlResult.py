@@ -1,9 +1,10 @@
+from collections import namedtuple
 
 class UrlResult:
-    def __init__(self, url, statusCode, parentUrl):
+    def __init__(self, url, statusCode):
         self.url = url
         self.statusCode = statusCode
-        self.parentUrls = [parentUrl]
+        self.parentUrls = []
         self.redirectLocation = None
 
     def getURL(self):
@@ -14,6 +15,9 @@ class UrlResult:
         
     def setStatusCode(self, aStatusCode):
         self.statusCode = aStatusCode
+
+    def getUrlText(self):
+        return self.urlText
 
     def getParentUrl(self):
         return self.parentUrls[0]
@@ -27,8 +31,11 @@ class UrlResult:
     def getRedirectLocation(self):
         return self.redirectLocation
 
-    def addParentUrl(self, url):
-        self.parentUrls.append(url)
+    def addParentUrl(self, url, text):
+        
+        ParentUrlText = namedtuple("ParentUrlText", ["text","url"])
+        parentUrlText = ParentUrlText(text, url)
+        self.parentUrls.append(parentUrlText)
 
 
     

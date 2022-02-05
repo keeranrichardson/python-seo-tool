@@ -17,7 +17,7 @@ class Scanner:
         # the results from the scan
         self.results = ScannerResults()
         # creating the first object to add to the queue
-        urlResultHomePage = UrlResult(self.sanitiseURL(self.startingUrl), 0, self.sanitiseURL(self.startingUrl))
+        urlResultHomePage = UrlResult(self.sanitiseURL(self.startingUrl), 0)
         # the queues for tracking the url states in the scan
         self.urlsToScan = [urlResultHomePage]
         self.urlsScanned = {}
@@ -45,14 +45,6 @@ class Scanner:
             return self.urlsToScan.pop()
         return None
 
-    def getNextURLToCrawl(self):
-        ''
-
-    def crawlURL(self, url):
-        webPage = WebPage(url)
-        links = webPage.findLinks()
-        return links 
-
     # processing URL
     # check status code for URL to see if 2XX
     # check url to see if it should be scanned
@@ -77,17 +69,8 @@ class Scanner:
                 events.append(webPageUrl + " redirects to: " + aLink)
                 # follow like normal link
 
-                self.addUrlToScanAndFoundQueues(aLink, webPageUrl)
-                '''
-                sanitisedALink = self.sanitiseURL(aLink)
-                if self.shouldAddToScanQueue(sanitisedALink):
-                    result = UrlResult(sanitisedALink, 0, webPageUrl)
-                    self.urlsToScan.append(result)
-                    self.urlsFound[sanitisedALink] = result
-                else:
-                    # add parent link to urlresult object
-                    result = self.getUrlFromQueue(sanitisedALink)
-                    result.addParentUrl(webPageUrl)'''
+                self.addUrlToScanAndFoundQueues(aLink, "",webPageUrl)
+
                 events.append("number of links to scan: 1 on " + webPageUrl)
 
             else:
@@ -97,19 +80,11 @@ class Scanner:
                     events.append("found " + str(len(links)) + " links on " + webPageUrl)
                     linksToProcess = 0
 
-                    for aLink in links:
-                        if self.addUrlToScanAndFoundQueues(aLink, webPageUrl):
+                    for aLinkTuple in links:
+                        if self.addUrlToScanAndFoundQueues(aLinkTuple.url, aLinkTuple.text, webPageUrl):
                             linksToProcess += 1
-                        '''sanitisedALink = self.sanitiseURL(aLink)
-                        if self.shouldAddToScanQueue(sanitisedALink):
-                            linksToProcess += 1
-                            result = UrlResult(sanitisedALink, 0, webPageUrl)
-                            self.urlsToScan.append(result)
-                            self.urlsFound[sanitisedALink] = result
-                        else:
-                            # add parent link to urlresult object
-                            result = self.getUrlFromQueue(sanitisedALink)
-                            result.addParentUrl(webPageUrl)'''
+                        self.addParentToPage(aLinkTuple, webPageUrl)
+
 
                     events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
 
@@ -117,18 +92,21 @@ class Scanner:
         events.append("status code: " + str(webPage.getStatusCode()) + " - " + webPageUrl)
         return events
     
-    def addUrlToScanAndFoundQueues(self, aLink, webPageUrl):
-        sanitisedALink = self.sanitiseURL(aLink)
+    def addUrlToScanAndFoundQueues(self, url, linkText, webPageUrl):
+        sanitisedALink = self.sanitiseURL(url)
         if self.shouldAddToScanQueue(sanitisedALink):
-            result = UrlResult(sanitisedALink, 0, webPageUrl)
+            result = UrlResult(sanitisedALink, 0)
             self.urlsToScan.append(result)
             self.urlsFound[sanitisedALink] = result
             return True
-        else:
-            # add parent link to urlresult object
-            result = self.getUrlFromQueue(sanitisedALink)
-            result.addParentUrl(webPageUrl)
-            return False
+
+        return False
+
+    def addParentToPage(self,aLinkTuple,parentPageUrl):
+        # add parent link to urlresult object
+        sanitisedALink = self.sanitiseURL(aLinkTuple.url)
+        result = self.getUrlFromQueue(sanitisedALink)
+        result.addParentUrl(parentPageUrl, aLinkTuple.text)
 
     def getUrlFromQueue(self, url):
         try:

@@ -70,13 +70,19 @@ class HTMLReporter:
             
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
-            parentUrl = self.aTag(result.getParentUrl(), "parent page")
+
+            parentUrls = "found on: "
+            commaString = ""
+            for urlTuple in result.getParentUrls():
+                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '"+urlTuple.text+"'"
+                commaString = ", "   
+
             if result.getRedirectLocation() != None:
                 redirectsTo = "Redirects to: "+self.aTag(result.getRedirectLocation(), result.getRedirectLocation())
             else:
                 redirectsTo = ""
 
-            lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrl, redirectsTo)
+            lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrls, redirectsTo)
             middle += lineInMiddle+"\n"
             statusCodeLinks[str(statusCode)] = statusCodeLinks[str(statusCode)] + lineInMiddle+"\n"
         

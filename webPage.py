@@ -3,6 +3,7 @@ import requests
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 from urlScanner import UrlScanner
+from collections import namedtuple
 
 class WebPage:
     def __init__(self, url):
@@ -47,7 +48,9 @@ class WebPage:
         for link in self.soup.find_all('a'):
             href = link.get('href')
             if href is not None:
-                self.urlsFound.append(self.makeFullUrl(self.url,href))
+                LinkTuple = namedtuple("LinkTuple", ["url","text","parentPage"])
+                aLinkTuple = LinkTuple(self.makeFullUrl(self.url,href), link.contents[0], self.url)
+                self.urlsFound.append(aLinkTuple)
         
         return self.urlsFound
     
