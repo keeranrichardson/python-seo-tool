@@ -6,7 +6,7 @@ class UrlResult:
         self.statusCode = statusCode
         self.parentUrls = []
         self.redirectLocation = None
-        self.isAnImage = False
+        self.isOfType = "link"
 
     def getURL(self):
         return self.url
@@ -36,19 +36,23 @@ class UrlResult:
         parentUrlText = ParentUrlText(text, url)
         self.parentUrls.append(parentUrlText)
 
-    def setUrlAsImage(self, isAnImage):
-        self.isAnImage = isAnImage
+    def setUrlAsImage(self):
+        self.isOfType = "image"
+    
+    def setUrlAsHeadLink(self):
+        self.isOfType = "headlink"
 
     def isA(self):
-        if self.isAnImage:
-            return "image"
-        return "link"
+        return self.isOfType
 
     def isImage(self):
-        return self.isAnImage
+        return (self.isOfType == "image")
 
     def isLink(self):
-        return not self.isAnImage
+        return (self.isOfType == "link")
+
+    def isHeadLink(self):
+        return (self.isOfType == "headlink")
 
 
     

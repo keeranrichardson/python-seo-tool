@@ -46,7 +46,12 @@ class HTMLReporter:
 
         imagesReportSection = self.createHTMLSection("Images found:", imageResults)
 
-        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + urlsReportSection + imagesReportSection +  bottom
+        headLinkResults = self.scannerResult.getHeadLinkResults()
+        numberOfHeadLinksFoundLine = "<p>Number of Head Links found = {}</p>".format(len(headLinkResults))
+
+        headLinksReportSection = self.createHTMLSection("Head Links found:", headLinkResults)
+
+        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + numberOfHeadLinksFoundLine+ urlsReportSection + imagesReportSection + headLinksReportSection + bottom
         return html
     
     def createHTMLSection(self, title, results):
@@ -71,7 +76,7 @@ class HTMLReporter:
             parentUrls = "found on: "
             commaString = ""
             for urlTuple in result.getParentUrls():
-                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '"+urlTuple.text+"'"
+                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '"+str(urlTuple.text)+"'"
                 commaString = ", "   
 
             if result.getRedirectLocation() != None:

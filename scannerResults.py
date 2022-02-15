@@ -28,6 +28,13 @@ class ScannerResults:
                 imageResults.append(result)
         return imageResults
 
+    def getHeadLinkResults(self):
+        headLinkResults = []
+        for result in self.results:
+            if result.isHeadLink():
+                headLinkResults.append(result)
+        return headLinkResults
+
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")
     

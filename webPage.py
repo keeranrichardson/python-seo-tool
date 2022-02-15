@@ -41,7 +41,7 @@ class WebPage:
 
     def findLinks(self):
         self.urlsFound = []
-
+        # todo: find links must be called before find images
         self.html = requests.get(self.url, allow_redirects=False).text
         self.soup = BeautifulSoup(self.html, "html.parser")
         
@@ -67,6 +67,32 @@ class WebPage:
                 self.imagesFound.append(aImageTuple)
         
         return self.imagesFound
+
+    def findHeadLinks(self):
+        self.headLinksFound = []
+
+        for link in self.soup.find_all('link'):
+            source = link.get('href')
+            # todo: report if href is none
+            if source is not None:
+                HeadLinkTuple = namedtuple("HeadLinkTuple", ["href","rel","type","title","parentPage"])
+
+                relVal = ""
+                typeVal = ""
+                titleVal = ""
+                if link.get("rel") != None:
+                    relVal = link.get("rel")
+                
+                if link.get("type") != None:
+                    typeVal = link.get("type")
+
+                if link.get("title") != None:
+                    titleVal = link.get("title")
+
+                aHeadLinkTuple = HeadLinkTuple(self.makeFullUrl(self.url,source), relVal, typeVal, titleVal, self.url)
+                self.headLinksFound.append(aHeadLinkTuple)
+        
+        return self.headLinksFound
 
     def getStatusCode(self):
         return self.statusCode

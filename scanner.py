@@ -75,6 +75,7 @@ class Scanner:
 
             else:
                 if self.isAllowedToBeCrawled(webPageUrl):
+                    # links
                     # do not add if already checked
                     links = webPage.findLinks() 
                     events.append("found " + str(len(links)) + " links on " + webPageUrl)
@@ -86,6 +87,8 @@ class Scanner:
                         self.addParentToPage(aLinkTuple, webPageUrl)
 
                     events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
+                    
+                    # images
 
                     images = webPage.findImages()
                     events.append("found " + str(len(images)) + " images on " + webPageUrl)
@@ -98,6 +101,20 @@ class Scanner:
                         self.addParentToPageImage(aImageTuple, webPageUrl)
 
                     events.append("number of images to scan: " + str(imagesToProcess) + " on " + webPageUrl)
+
+                    # headlinks
+
+                    headlinks = webPage.findHeadLinks()
+                    events.append("found " + str(len(headlinks)) + " head links on " + webPageUrl)
+
+                    headLinksToProcess = 0
+
+                    for aHeadLinkTuple in headlinks:
+                        if self.addUrlToScanAndFoundQueues(aHeadLinkTuple.href):
+                            headLinksToProcess += 1
+                        self.addParentToPageHeadLink(aHeadLinkTuple, webPageUrl)
+
+                    events.append("number of head links to scan: " + str(headLinksToProcess) + " on " + webPageUrl)
 
         self.urlsStatusChecked[webPageUrl] = urlResult
         
@@ -125,8 +142,13 @@ class Scanner:
         sanitisedALink = self.sanitiseURL(aImageTuple.src)
         result = self.getUrlFromQueue(sanitisedALink)
         result.addParentUrl(parentPageUrl, aImageTuple.alt)
-        result.setUrlAsImage(True)
+        result.setUrlAsImage()
 
+    def addParentToPageHeadLink(self, aHeadLinkTuple, parentPageUrl):
+        sanitisedALink = self.sanitiseURL(aHeadLinkTuple.href)
+        result = self.getUrlFromQueue(sanitisedALink)
+        result.addParentUrl(parentPageUrl, aHeadLinkTuple.rel)
+        result.setUrlAsHeadLink()
 
     def getUrlFromQueue(self, url):
         try:
