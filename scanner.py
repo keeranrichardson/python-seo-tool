@@ -77,44 +77,17 @@ class Scanner:
                 if self.isAllowedToBeCrawled(webPageUrl):
                     # links
                     # do not add if already checked
-                    links = webPage.findLinks() 
-                    events.append("found " + str(len(links)) + " links on " + webPageUrl)
-                    linksToProcess = 0
 
-                    for aLinkTuple in links:
-                        if self.addUrlToScanAndFoundQueues(aLinkTuple.url):
-                            linksToProcess += 1
-                        self.addParentToPage(aLinkTuple, webPageUrl)
-
-                    events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
+                    self.addResultsToCrawl(events, webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
                     
                     # images
 
-                    images = webPage.findImages()
-                    events.append("found " + str(len(images)) + " images on " + webPageUrl)
-
-                    imagesToProcess = 0
-
-                    for aImageTuple in images:
-                        if self.addUrlToScanAndFoundQueues(aImageTuple.src):
-                            imagesToProcess += 1
-                        self.addParentToPageImage(aImageTuple, webPageUrl)
-
-                    events.append("number of images to scan: " + str(imagesToProcess) + " on " + webPageUrl)
+                    self.addResultsToCrawl(events, webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
 
                     # headlinks
 
-                    headlinks = webPage.findHeadLinks()
-                    events.append("found " + str(len(headlinks)) + " head links on " + webPageUrl)
-
-                    headLinksToProcess = 0
-
-                    for aHeadLinkTuple in headlinks:
-                        if self.addUrlToScanAndFoundQueues(aHeadLinkTuple.href):
-                            headLinksToProcess += 1
-                        self.addParentToPageHeadLink(aHeadLinkTuple, webPageUrl)
-
-                    events.append("number of head links to scan: " + str(headLinksToProcess) + " on " + webPageUrl)
+                    self.addResultsToCrawl(events, webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
+                    
 
         self.urlsStatusChecked[webPageUrl] = urlResult
         
@@ -130,6 +103,18 @@ class Scanner:
             return True
 
         return False
+
+    def addResultsToCrawl(self, events, foundResults, typeOfResult, webPageUrl,tupleVal, callback):
+
+        events.append("found " + str(len(foundResults)) + " " + typeOfResult + " on " + webPageUrl)
+        resultsToProcess = 0
+
+        for aTuple in foundResults:
+            if self.addUrlToScanAndFoundQueues(aTuple._asdict()[tupleVal]):
+                resultsToProcess += 1
+            callback(aTuple, webPageUrl)
+
+        events.append("number of " + typeOfResult + " to scan: " + str(resultsToProcess) + " on " + webPageUrl)
 
     def addParentToPage(self,aLinkTuple,parentPageUrl):
         # add parent link to urlresult object
@@ -147,7 +132,7 @@ class Scanner:
     def addParentToPageHeadLink(self, aHeadLinkTuple, parentPageUrl):
         sanitisedALink = self.sanitiseURL(aHeadLinkTuple.href)
         result = self.getUrlFromQueue(sanitisedALink)
-        result.addParentUrl(parentPageUrl, aHeadLinkTuple.rel)
+        result.addParentUrl(parentPageUrl, str(aHeadLinkTuple.rel))
         result.setUrlAsHeadLink()
 
     def getUrlFromQueue(self, url):

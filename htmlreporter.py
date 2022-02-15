@@ -76,7 +76,7 @@ class HTMLReporter:
             parentUrls = "found on: "
             commaString = ""
             for urlTuple in result.getParentUrls():
-                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '"+str(urlTuple.text)+"'"
+                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + urlTuple.text + "'"
                 commaString = ", "   
 
             if result.getRedirectLocation() != None:
