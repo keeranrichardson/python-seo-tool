@@ -47,6 +47,7 @@ class WebPage:
         
         for link in self.soup.find_all('a'):
             href = link.get('href')
+            # todo: report if href is none
             if href is not None:
                 LinkTuple = namedtuple("LinkTuple", ["url","text","parentPage"])
                 aLinkTuple = LinkTuple(self.makeFullUrl(self.url,href), link.contents[0], self.url)
@@ -58,9 +59,12 @@ class WebPage:
         self.imagesFound = []
 
         for image in self.soup.find_all('img'):
-            source = image.get('scr')
+            source = image.get('src')
+            # todo: report if src is none
             if source is not None:
-                self.imagesFound.append(self.makeFullUrl(self.url,source))
+                ImageTuple = namedtuple("ImageTuple", ["src","alt","parentPage"])
+                aImageTuple = ImageTuple(self.makeFullUrl(self.url,source), image.get('alt'), self.url)
+                self.imagesFound.append(aImageTuple)
         
         return self.imagesFound
 

@@ -9,7 +9,7 @@ from scannerResults import ScannerResults
 class Scanner:
     def __init__(self, url, restrictToDomain):
         # config for handling urls with slash at end
-        self.treatUrlsWithEndingSlashSameAsWithout = True 
+        self.treatUrlsWithEndingSlashSameAsWithout = False
         # the domain we are restricting the scan to
         self.restrictToDomain = restrictToDomain
         # the url we start the scan with
@@ -69,30 +69,42 @@ class Scanner:
                 events.append(webPageUrl + " redirects to: " + aLink)
                 # follow like normal link
 
-                self.addUrlToScanAndFoundQueues(aLink, "",webPageUrl)
+                self.addUrlToScanAndFoundQueues(aLink)
 
                 events.append("number of links to scan: 1 on " + webPageUrl)
 
             else:
                 if self.isAllowedToBeCrawled(webPageUrl):
                     # do not add if already checked
-                    links = webPage.findLinks()
+                    links = webPage.findLinks() 
                     events.append("found " + str(len(links)) + " links on " + webPageUrl)
                     linksToProcess = 0
 
                     for aLinkTuple in links:
-                        if self.addUrlToScanAndFoundQueues(aLinkTuple.url, aLinkTuple.text, webPageUrl):
+                        if self.addUrlToScanAndFoundQueues(aLinkTuple.url):
                             linksToProcess += 1
                         self.addParentToPage(aLinkTuple, webPageUrl)
 
-
                     events.append("number of links to scan: " + str(linksToProcess) + " on " + webPageUrl)
 
+                    images = webPage.findImages()
+                    events.append("found " + str(len(images)) + " images on " + webPageUrl)
+
+                    imagesToProcess = 0
+
+                    for aImageTuple in images:
+                        if self.addUrlToScanAndFoundQueues(aImageTuple.src):
+                            imagesToProcess += 1
+                        self.addParentToPageImage(aImageTuple, webPageUrl)
+
+                    events.append("number of images to scan: " + str(imagesToProcess) + " on " + webPageUrl)
+
         self.urlsStatusChecked[webPageUrl] = urlResult
-        events.append("status code: " + str(webPage.getStatusCode()) + " - " + webPageUrl)
+        
+        events.append("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl)
         return events
     
-    def addUrlToScanAndFoundQueues(self, url, linkText, webPageUrl):
+    def addUrlToScanAndFoundQueues(self, url):
         sanitisedALink = self.sanitiseURL(url)
         if self.shouldAddToScanQueue(sanitisedALink):
             result = UrlResult(sanitisedALink, 0)
@@ -107,6 +119,14 @@ class Scanner:
         sanitisedALink = self.sanitiseURL(aLinkTuple.url)
         result = self.getUrlFromQueue(sanitisedALink)
         result.addParentUrl(parentPageUrl, aLinkTuple.text)
+
+    def addParentToPageImage(self,aImageTuple,parentPageUrl):
+        # add parent link to urlresult object
+        sanitisedALink = self.sanitiseURL(aImageTuple.src)
+        result = self.getUrlFromQueue(sanitisedALink)
+        result.addParentUrl(parentPageUrl, aImageTuple.alt)
+        result.setUrlAsImage(True)
+
 
     def getUrlFromQueue(self, url):
         try:
