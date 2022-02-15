@@ -73,6 +73,12 @@ class HTMLReporter:
         scriptsReportSection = self.createHTMLSection("Scripts found:", scriptResults)
         htmlSections.append(scriptsReportSection)
 
+        iFrameResults = self.scannerResult.getIFrameResults()
+        summaryCountLines.append("<p>Number of IFrames found = {}</p>".format(len(iFrameResults)))
+
+        iFrameReportSection = self.createHTMLSection("IFrames found:", iFrameResults)
+        htmlSections.append(iFrameReportSection)
+
         html = top + scannerStartDateLine + timeDifferenceLine + " ".join(summaryCountLines)  + " ".join(htmlSections) + bottom
         return html
     

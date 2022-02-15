@@ -47,6 +47,9 @@ class ScannerResults:
     def getScriptResults(self):
         return self.getResultsWhere("script")
 
+    def getIFrameResults(self):
+        return self.getResultsWhere("iframe")
+
 
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")

@@ -47,6 +47,9 @@ class UrlResult:
     def setUrlAsScript(self):
         self.isOfType = "script"
 
+    def setUrlAsIFrame(self):
+        self.isOfType = "iframe"
+
     def setIsInternal(self, internal):
         self.isUrlInternal = internal
 
@@ -67,6 +70,9 @@ class UrlResult:
 
     def isScript(self):
         return (self.isOfType == "script")
+
+    def isIFrame(self):
+        return (self.isOfType == "iframe")
 
 
     

@@ -9,9 +9,9 @@ class WebPage:
     def __init__(self, url):
         self.url = url
         self.urlScanner = UrlScanner(self.url)
+        self.statusCode = self.urlScanner.getStatus()
 
     def isUrlScannable(self):
-        self.statusCode = self.urlScanner.getStatus()
 
         validStatusCodes = [
                             200,    # OK
@@ -106,6 +106,24 @@ class WebPage:
                 self.scriptsFound.append(aScriptTuple)
         
         return self.scriptsFound
+
+    def findIFrames(self):
+        self.iFramesFound = []
+
+        for iFrame in self.soup.find_all('iframe'):
+            source = iFrame.get('src')
+            # todo: report if src is none
+            if source is not None:
+                IFrameTuple = namedtuple("IFrameTuple", ["src","title","parentPage"])
+
+                titleVal = ""
+                if iFrame.get("title") != None:
+                    titleVal = iFrame.get("title")
+
+                aIFrameTuple = IFrameTuple(self.makeFullUrl(self.url,source), titleVal, self.url)
+                self.iFramesFound.append(aIFrameTuple)
+        
+        return self.iFramesFound
 
     def getStatusCode(self):
         return self.statusCode

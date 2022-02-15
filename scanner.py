@@ -56,10 +56,12 @@ class Scanner:
         webPage = WebPage(urlResult.getURL())
         webPageUrl = self.sanitiseURL(webPage.getURL())
 
+        urlResult.setStatusCode(webPage.getStatusCode())
+        self.results.addResult(urlResult)
+
         if webPage.isUrlScannable():
             self.results.addUrlScanned(webPageUrl)
-            urlResult.setStatusCode(webPage.getStatusCode())
-            self.results.addResult(urlResult)
+            
         
             # todo: refactor to remove duplicate code
             if urlResult.statusCode in [301, 302, 307, 308]:
@@ -91,6 +93,10 @@ class Scanner:
                     # scripts
 
                     self.addResultsToCrawl(events, webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
+
+                    # iframes
+
+                    self.addResultsToCrawl(events, webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
                     
 
         self.urlsStatusChecked[webPageUrl] = urlResult
@@ -145,6 +151,12 @@ class Scanner:
         result = self.getUrlFromQueue(sanitisedALink)
         result.addParentUrl(parentPageUrl, '')
         result.setUrlAsScript()
+
+    def addParentToPageIFrame(self, aIFrameTuple, parentPageUrl):
+        sanitisedALink = self.sanitiseURL(aIFrameTuple.src)
+        result = self.getUrlFromQueue(sanitisedALink)
+        result.addParentUrl(parentPageUrl, aIFrameTuple.title)
+        result.setUrlAsIFrame()
 
     def getUrlFromQueue(self, url):
         try:
