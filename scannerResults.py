@@ -14,33 +14,25 @@ class ScannerResults:
     def getResults(self):
         return self.results
 
+    def getResultsWhere(self,typeOf):
+        results = []
+        for result in self.results:
+            if result.isA()==typeOf:
+                results.append(result)
+        return results
+
     def getLinkResults(self):
-        linkResults = []
-        for link in self.results:
-            if link.isLink():
-                linkResults.append(link)
-        return linkResults
+        return self.getResultsWhere("link")
 
     def getImageResults(self):
-        imageResults = []
-        for result in self.results:
-            if result.isImage():
-                imageResults.append(result)
-        return imageResults
+        return self.getResultsWhere("image")
 
     def getHeadLinkResults(self):
-        headLinkResults = []
-        for result in self.results:
-            if result.isHeadLink():
-                headLinkResults.append(result)
-        return headLinkResults
+        return self.getResultsWhere("headlink")
 
     def getScriptResults(self):
-        scriptResults = []
-        for result in self.results:
-            if result.isScript():
-                scriptResults.append(result)
-        return scriptResults
+        return self.getResultsWhere("script")
+
 
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")

@@ -37,26 +37,37 @@ class HTMLReporter:
         duration = '{:02} hours, {:02} minutes, {:02} seconds'.format(hours, minutes, seconds)
         timeDifferenceLine = "<p>Duration of scan: {}</p>".format(duration)
 
+
+        summaryCountLines = []
+        htmlSections = []
+
+
+
         numberOfUrlsFoundLine = "<p>Number of URLs found = {}</p>".format(len(results))
+        summaryCountLines.append(numberOfUrlsFoundLine)
 
         urlsReportSection = self.createHTMLSection("URLs found:", results)
+        htmlSections.append(urlsReportSection)
 
         imageResults = self.scannerResult.getImageResults()
-        numberOfImagesFoundLine = "<p>Number of Images found = {}</p>".format(len(imageResults))
+        summaryCountLines.append( "<p>Number of Images found = {}</p>".format(len(imageResults)))
 
         imagesReportSection = self.createHTMLSection("Images found:", imageResults)
+        htmlSections.append(imagesReportSection)
 
         headLinkResults = self.scannerResult.getHeadLinkResults()
-        numberOfHeadLinksFoundLine = "<p>Number of Head Links found = {}</p>".format(len(headLinkResults))
+        summaryCountLines.append("<p>Number of Head Links found = {}</p>".format(len(headLinkResults)))
 
         headLinksReportSection = self.createHTMLSection("Head Links found:", headLinkResults)
+        htmlSections.append(headLinksReportSection)
 
         scriptResults = self.scannerResult.getScriptResults()
-        numberOfScriptsFoundLine = "<p>Number of Scripts found = {}</p>".format(len(scriptResults))
+        summaryCountLines.append("<p>Number of Scripts found = {}</p>".format(len(scriptResults)))
 
         scriptsReportSection = self.createHTMLSection("Scripts found:", scriptResults)
+        htmlSections.append(scriptsReportSection)
 
-        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + numberOfHeadLinksFoundLine + numberOfScriptsFoundLine + urlsReportSection + imagesReportSection + headLinksReportSection + scriptsReportSection + bottom
+        html = top + scannerStartDateLine + timeDifferenceLine + " ".join(summaryCountLines)  + " ".join(htmlSections) + bottom
         return html
     
     def createHTMLSection(self, title, results):
