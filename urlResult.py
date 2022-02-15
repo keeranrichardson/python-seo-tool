@@ -42,6 +42,9 @@ class UrlResult:
     def setUrlAsHeadLink(self):
         self.isOfType = "headlink"
 
+    def setUrlAsScript(self):
+        self.isOfType = "script"
+
     def isA(self):
         return self.isOfType
 
@@ -53,6 +56,9 @@ class UrlResult:
 
     def isHeadLink(self):
         return (self.isOfType == "headlink")
+
+    def isScript(self):
+        return (self.isOfType == "script")
 
 
     

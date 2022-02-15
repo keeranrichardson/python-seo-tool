@@ -35,6 +35,13 @@ class ScannerResults:
                 headLinkResults.append(result)
         return headLinkResults
 
+    def getScriptResults(self):
+        scriptResults = []
+        for result in self.results:
+            if result.isScript():
+                scriptResults.append(result)
+        return scriptResults
+
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")
     

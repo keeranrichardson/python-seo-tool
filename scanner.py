@@ -87,6 +87,10 @@ class Scanner:
                     # headlinks
 
                     self.addResultsToCrawl(events, webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
+
+                    # scripts
+
+                    self.addResultsToCrawl(events, webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
                     
 
         self.urlsStatusChecked[webPageUrl] = urlResult
@@ -134,6 +138,12 @@ class Scanner:
         result = self.getUrlFromQueue(sanitisedALink)
         result.addParentUrl(parentPageUrl, str(aHeadLinkTuple.rel))
         result.setUrlAsHeadLink()
+
+    def addParentToPageScript(self, aScriptTuple, parentPageUrl):
+        sanitisedALink = self.sanitiseURL(aScriptTuple.src)
+        result = self.getUrlFromQueue(sanitisedALink)
+        result.addParentUrl(parentPageUrl, '')
+        result.setUrlAsScript()
 
     def getUrlFromQueue(self, url):
         try:

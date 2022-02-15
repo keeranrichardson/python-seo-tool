@@ -94,6 +94,19 @@ class WebPage:
         
         return self.headLinksFound
 
+    def findScripts(self):
+        self.scriptsFound = []
+
+        for script in self.soup.find_all('script'):
+            source = script.get('src')
+            # todo: report if src is none
+            if source is not None:
+                ScriptTuple = namedtuple("ScriptTuple", ["src","parentPage"])
+                aScriptTuple = ScriptTuple(self.makeFullUrl(self.url,source), self.url)
+                self.scriptsFound.append(aScriptTuple)
+        
+        return self.scriptsFound
+
     def getStatusCode(self):
         return self.statusCode
 

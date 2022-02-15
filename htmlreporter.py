@@ -51,7 +51,12 @@ class HTMLReporter:
 
         headLinksReportSection = self.createHTMLSection("Head Links found:", headLinkResults)
 
-        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + numberOfHeadLinksFoundLine+ urlsReportSection + imagesReportSection + headLinksReportSection + bottom
+        scriptResults = self.scannerResult.getScriptResults()
+        numberOfScriptsFoundLine = "<p>Number of Scripts found = {}</p>".format(len(scriptResults))
+
+        scriptsReportSection = self.createHTMLSection("Scripts found:", scriptResults)
+
+        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + numberOfHeadLinksFoundLine + numberOfScriptsFoundLine + urlsReportSection + imagesReportSection + headLinksReportSection + scriptsReportSection + bottom
         return html
     
     def createHTMLSection(self, title, results):
