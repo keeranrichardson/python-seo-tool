@@ -11,8 +11,8 @@ class TestHTMLReporter:
     def testMakeReport(self):
 
         scannerResults = ScannerResults()
-        scannerResults.add(UrlResult("keeranrichardson.com", "200", "keeranrichardson.com"))
-        scannerResults.add(UrlResult("keeranrichardson.com/bob", "404", "keeranrichardson.com"))
+        scannerResults.addResult(UrlResult("keeranrichardson.com", "200"))
+        scannerResults.addResult(UrlResult("keeranrichardson.com/bob", "404"))
 
         report = HTMLReporter(scannerResults).makeReport()
 
