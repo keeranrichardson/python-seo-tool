@@ -10,7 +10,7 @@ class HTMLReporter:
         return tag
         
     def makeReport(self):
-        results = self.scannerResult.getResults()
+        results = self.scannerResult.getLinkResults()
         top = '''
                 <html>
                     <head>
@@ -27,34 +27,31 @@ class HTMLReporter:
     
         scannerStartDateLine = "<h2>Date and time of scan: {}</h2>\n".format(self.scannerResult.getStartDateTime())
 
-#https://stackoverflow.com/questions/538666/format-timedelta-to-string
+# https://stackoverflow.com/questions/538666/format-timedelta-to-string
 
         timeDifference = self.scannerResult.getEndDateTimeRaw() - self.scannerResult.getStartDateTimeRaw()
         seconds = timeDifference.seconds
         hours, remainder = divmod(seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
-#https://docs.python.org/3/library/string.html#format-string-syntax
+# https://docs.python.org/3/library/string.html#format-string-syntax
         duration = '{:02} hours, {:02} minutes, {:02} seconds'.format(hours, minutes, seconds)
         timeDifferenceLine = "<p>Duration of scan: {}</p>".format(duration)
 
         numberOfUrlsFoundLine = "<p>Number of URLs found = {}</p>".format(len(results))
 
-        urlsScanned = self.scannerResult.getUrlsScanned()
-        urlsScannedLines = "<p>Number of URLs scanned = {}</p>".format(len(urlsScanned))
+        urlsReportSection = self.createHTMLSection("URLs found:", results)
 
-        whichUrlsScannedLines = "<p>URLs scanned: </p>"
-        whichUrlsScannedLines += "<ul>"
-        for url in urlsScanned:
-            whichUrlsScannedLines += "<li><a href = '"+url+"' target='_blank'>"+url+"</a></li>"
-        whichUrlsScannedLines += "</ul>"
+        imageResults = self.scannerResult.getImageResults()
+        numberOfImagesFoundLine = "<p>Number of Images found = {}</p>".format(len(imageResults))
 
+        imagesReportSection = self.createHTMLSection("Images found:", imageResults)
 
-        '''URLs scanned:
-            - https:// jfdka
-            - https:// fjksao
-            '''
+        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine  + numberOfImagesFoundLine + urlsReportSection + imagesReportSection +  bottom
+        return html
+    
+    def createHTMLSection(self, title, results):
 
-        middle = "<p>URLs found:</p>"
+        middle = "<h2>" + title + "</h2>"
 
         middle +="<ul>"
     
@@ -89,12 +86,11 @@ class HTMLReporter:
         middle +="</ul>"
 
         for statusCode in statusCodeLinks:
-            middle += "\n<p>"+statusCode+"s:</p>\n"
+            middle += "\n<h3>"+statusCode+"s:</h3>\n"
             middle +="<ul>"
             middle += statusCodeLinks[statusCode]
             middle +="</ul>"
 
+        return middle
         
-
-        html = top + scannerStartDateLine + timeDifferenceLine + numberOfUrlsFoundLine + urlsScannedLines + whichUrlsScannedLines + middle + bottom
-        return html
+       

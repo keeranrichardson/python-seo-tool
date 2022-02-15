@@ -6,7 +6,7 @@ class UrlResult:
         self.statusCode = statusCode
         self.parentUrls = []
         self.redirectLocation = None
-        self.isImage = False
+        self.isAnImage = False
 
     def getURL(self):
         return self.url
@@ -36,13 +36,19 @@ class UrlResult:
         parentUrlText = ParentUrlText(text, url)
         self.parentUrls.append(parentUrlText)
 
-    def setUrlAsImage(self, isImage):
-        self.isImage = isImage
+    def setUrlAsImage(self, isAnImage):
+        self.isAnImage = isAnImage
 
     def isA(self):
-        if self.isImage:
+        if self.isAnImage:
             return "image"
         return "link"
+
+    def isImage(self):
+        return self.isAnImage
+
+    def isLink(self):
+        return not self.isAnImage
 
 
     

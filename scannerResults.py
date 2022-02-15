@@ -14,6 +14,20 @@ class ScannerResults:
     def getResults(self):
         return self.results
 
+    def getLinkResults(self):
+        linkResults = []
+        for link in self.results:
+            if link.isLink():
+                linkResults.append(link)
+        return linkResults
+
+    def getImageResults(self):
+        imageResults = []
+        for result in self.results:
+            if result.isImage():
+                imageResults.append(result)
+        return imageResults
+
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")
     
