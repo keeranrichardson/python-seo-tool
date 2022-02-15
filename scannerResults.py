@@ -14,6 +14,20 @@ class ScannerResults:
     def getResults(self):
         return self.results
 
+    def getInternalLinkResults(self):
+        results = []
+        for result in self.getLinkResults():
+            if result.isInternal():
+                results.append(result)
+        return results
+
+    def getExternalLinkResults(self):
+        results = []
+        for result in self.getLinkResults():
+            if not result.isInternal():
+                results.append(result)
+        return results
+
     def getResultsWhere(self,typeOf):
         results = []
         for result in self.results:

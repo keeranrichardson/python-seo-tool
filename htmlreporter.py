@@ -10,7 +10,7 @@ class HTMLReporter:
         return tag
         
     def makeReport(self):
-        results = self.scannerResult.getLinkResults()
+        
         top = '''
                 <html>
                     <head>
@@ -41,13 +41,19 @@ class HTMLReporter:
         summaryCountLines = []
         htmlSections = []
 
+        results = self.scannerResult.getInternalLinkResults()
+        numberOfInternalUrlsFoundLine = "<p>Number of internal URLs found = {}</p>".format(len(results))
+        summaryCountLines.append(numberOfInternalUrlsFoundLine)
 
+        internalUrlsReportSection = self.createHTMLSection("Internal URLs found:", results)
+        htmlSections.append(internalUrlsReportSection)
 
-        numberOfUrlsFoundLine = "<p>Number of URLs found = {}</p>".format(len(results))
-        summaryCountLines.append(numberOfUrlsFoundLine)
+        results = self.scannerResult.getExternalLinkResults()
+        numberOfExternalUrlsFoundLine = "<p>Number of enternal URLs found = {}</p>".format(len(results))
+        summaryCountLines.append(numberOfExternalUrlsFoundLine)
 
-        urlsReportSection = self.createHTMLSection("URLs found:", results)
-        htmlSections.append(urlsReportSection)
+        externalUrlsReportSection = self.createHTMLSection("External URLs found:", results)
+        htmlSections.append(externalUrlsReportSection)
 
         imageResults = self.scannerResult.getImageResults()
         summaryCountLines.append( "<p>Number of Images found = {}</p>".format(len(imageResults)))

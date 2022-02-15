@@ -95,7 +95,7 @@ class Scanner:
 
         self.urlsStatusChecked[webPageUrl] = urlResult
         
-        events.append("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl)
+        events.append("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl + " " + str(urlResult.isInternal()))
         return events
     
     def addUrlToScanAndFoundQueues(self, url):
@@ -104,6 +104,7 @@ class Scanner:
             result = UrlResult(sanitisedALink, 0)
             self.urlsToScan.append(result)
             self.urlsFound[sanitisedALink] = result
+            result.setIsInternal(self.isInternal(sanitisedALink))
             return True
 
         return False
@@ -175,9 +176,11 @@ class Scanner:
             return False
         return True
 
-    def isAllowedToBeCrawled(self, url):
+    def isInternal(self,url):
         parsedUrl = urlparse(url)
         if self.restrictToDomain in parsedUrl.netloc:
-                return True
+            return True
         return False
-   
+
+    def isAllowedToBeCrawled(self, url):
+        return self.isInternal(url)

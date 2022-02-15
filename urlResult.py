@@ -7,6 +7,8 @@ class UrlResult:
         self.parentUrls = []
         self.redirectLocation = None
         self.isOfType = "link"
+        self.isUrlInternal = True
+
 
     def getURL(self):
         return self.url
@@ -44,6 +46,12 @@ class UrlResult:
 
     def setUrlAsScript(self):
         self.isOfType = "script"
+
+    def setIsInternal(self, internal):
+        self.isUrlInternal = internal
+
+    def isInternal(self):
+        return self.isUrlInternal        
 
     def isA(self):
         return self.isOfType
