@@ -12,6 +12,7 @@ from sitemapScanner import SitemapScanner
 class TkinterGui:
     def __init__(self, configParams):
         self.configParams = configParams
+        self.scanIsActive = False
 
     def showGui(self):
         self.window = tk.Tk()
@@ -44,13 +45,21 @@ class TkinterGui:
         self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
         self.startScanBtn.pack()
 
+        self.pauseScanBtn=tk.Button(self.window, text="Pause Scan", command = self.pauseScan)
+        self.pauseScanBtn.pack()
+        self.pauseScanBtn["state"] = "disabled"
+
+        self.continueScanBtn=tk.Button(self.window, text="Continue Scan", command = self.unpauseScan)
+        self.continueScanBtn.pack()
+        self.continueScanBtn["state"] = "disabled"
+
         self.showLogs=scrolledtext.ScrolledText(self.window, height = 5)
         #self.showLogs.see(tk.END)
         self.showLogs.pack()
 
-        self.btn2=tk.Button(self.window, text="open report", command = self.openReport)
-        self.btn2.pack()
-        self.btn2["state"] = "disabled"
+        self.reportBtn=tk.Button(self.window, text="open report", command = self.openReport)
+        self.reportBtn.pack()
+        self.reportBtn["state"] = "disabled"
 
         self.window.mainloop()
 
@@ -72,12 +81,18 @@ class TkinterGui:
             sitemapScanner.addSitemapUrlsToScan(self.scanner)
             self.scanner.setCanCrawlUrls(False)
 
-        self.startScanBtn["state"] = "disabled"
-        self.btn2["state"] = "disabled"
+        self.startScanBtn.config(text = "Restart Scan")
+
+        self.startScanBtn["state"] = "normal"
+        self.reportBtn["state"] = "disabled"
+        self.pauseScanBtn["state"] = "normal"
+        self.continueScanBtn["state"] = "disabled"
+
+        self.scanIsActive = True
         self.continueScan()
 
     def continueScan(self):
-        if(self.scanner.isMoreToScan()):
+        if self.scanIsActive == True and self.scanner.isMoreToScan():
             eventLog = self.scanner.scanNext()
             # update gui
             for event in eventLog:
@@ -94,10 +109,38 @@ class TkinterGui:
             self.window.after(rateLimitValue, self.continueScan)
         
         else:
-            self.startScanBtn["state"] = "normal"
-            self.btn2["state"] = "normal"
+
+            if self.scanner.isMoreToScan():
+                self.startScanBtn["state"] = "normal"
+                self.reportBtn["state"] = "normal"
+                self.pauseScanBtn["state"] = "disabled"
+                self.continueScanBtn["state"] = "normal"    
+
+            else:
+                self.startScanBtn["state"] = "normal"
+                self.reportBtn["state"] = "normal"
+                self.pauseScanBtn["state"] = "disabled"
+                self.continueScanBtn["state"] = "disabled"
+
             self.showLogs.see(tk.END)
             self.generateReport()
+
+    def pauseScan(self):
+        self.scanIsActive = False
+
+        self.startScanBtn["state"] = "normal"
+        self.reportBtn["state"] = "normal"
+        self.pauseScanBtn["state"] = "disabled"
+        self.continueScanBtn["state"] = "normal"
+
+    def unpauseScan(self):
+        self.scanIsActive = True
+        self.continueScan()
+
+        self.startScanBtn["state"] = "normal"
+        self.reportBtn["state"] = "disabled"
+        self.pauseScanBtn["state"] = "normal"
+        self.continueScanBtn["state"] = "disabled"
 
     def openReport(self):
         BrowserController().open(self.report.getPathAndFileName())
