@@ -19,10 +19,14 @@ class TkinterGui:
         self.window.title('link checker')
         #self.window.geometry("300x200+10+10")
 
-        tk.Label(text="Enter URL:").pack()
+        tk.Label(text="Enter domain or sitemap URL:").pack()
 
-        self.txtfld=tk.Entry(self.window)
-        self.txtfld.pack()
+        entryFrame = tk.Frame(self.window)
+
+        self.txtfld=tk.Entry(entryFrame)
+        self.txtfld.pack(fill = 'x')
+
+        entryFrame.pack(padx = 20, fill = 'x')
 
         tk.Label(text="Select rate limiting value (milliseconds):").pack()
 
@@ -31,10 +35,14 @@ class TkinterGui:
         self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500, 0)
         self.rateLimitMenu.pack()
 
-        tk.Label(text="Enter file name of HTML report:").pack()
+        enterFileNameFrame = tk.Frame(self.window)
+        
+        tk.Label(enterFileNameFrame, text="Enter file name of HTML report:").pack()
 
-        self.enterPath=tk.Entry(self.window)
-        self.enterPath.pack()
+        self.enterPath=tk.Entry(enterFileNameFrame)
+        self.enterPath.pack(fill = 'x')
+
+        enterFileNameFrame.pack(padx = 20, fill = 'x')
 
         self.choosePathButton = tk.Button(self.window, text = "select path for HTML report", command = self.choosePath)
         self.choosePathButton.pack()
@@ -42,24 +50,32 @@ class TkinterGui:
         self.pathLabel = tk.Label(text="Path for HTML report = "+self.getCurrentHTMLReportPath())
         self.pathLabel.pack()
 
-        self.startScanBtn=tk.Button(self.window, text="Start Scan", command = self.startScan)
-        self.startScanBtn.pack()
+        buttonFrame = tk.Frame(self.window)
 
-        self.pauseScanBtn=tk.Button(self.window, text="Pause Scan", command = self.pauseScan)
-        self.pauseScanBtn.pack()
+        self.startScanBtn=tk.Button(buttonFrame, text="Start Scan", command = self.startScan)
+        self.startScanBtn.pack(side = tk.LEFT)
+
+        self.pauseScanBtn=tk.Button(buttonFrame, text="Pause Scan", command = self.pauseScan)
+        self.pauseScanBtn.pack(side = tk.LEFT)
         self.pauseScanBtn["state"] = "disabled"
 
-        self.continueScanBtn=tk.Button(self.window, text="Continue Scan", command = self.unpauseScan)
-        self.continueScanBtn.pack()
+        self.continueScanBtn=tk.Button(buttonFrame, text="Continue Scan", command = self.unpauseScan)
+        self.continueScanBtn.pack(side = tk.LEFT)
         self.continueScanBtn["state"] = "disabled"
 
-        self.showLogs=scrolledtext.ScrolledText(self.window, height = 5)
-        #self.showLogs.see(tk.END)
-        self.showLogs.pack()
+        buttonFrame.pack()
+
+        scrolledTextFrame = tk.Frame(self.window)
 
         self.reportBtn=tk.Button(self.window, text="open report", command = self.openReport)
         self.reportBtn.pack()
         self.reportBtn["state"] = "disabled"
+
+        self.showLogs=scrolledtext.ScrolledText(scrolledTextFrame)
+        #self.showLogs.see(tk.END)
+        self.showLogs.pack(fill = 'both', expand = True) 
+
+        scrolledTextFrame.pack(padx = 20, pady = 20, fill = 'both', expand = True)
 
         self.window.mainloop()
 
