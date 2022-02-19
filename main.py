@@ -9,6 +9,8 @@ import os
 import tkinter as tk
 from tkinterGui import TkinterGui
 from reportGenerator import ReportGenerator
+from sitemapScanner import SitemapScanner
+
 
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
@@ -29,6 +31,13 @@ else:
 
     parseUrl = urlparse(urlToParse)
     scanner = Scanner(urlToParse, parseUrl.netloc)
+    
+    # if sitemap, do not crawl urls found
+    sitemapScanner = SitemapScanner(urlToParse)
+    if sitemapScanner.isSitemap():
+        sitemapScanner.addSitemapUrlsToScan(scanner)
+        scanner.setCanCrawlUrls(False)
+
     scanner.scan()
     
     report = ReportGenerator(configParams, scanner)

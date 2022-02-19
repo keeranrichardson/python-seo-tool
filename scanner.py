@@ -3,6 +3,7 @@ from webPage import WebPage
 from urlScanner import UrlScanner
 from urlResult import UrlResult
 from urllib.parse import urlparse
+from urllib.parse import urljoin
 import datetime
 from scannerResults import ScannerResults
 
@@ -23,6 +24,8 @@ class Scanner:
         self.urlsScanned = {}
         self.urlsStatusChecked = {}
         self.urlsFound = {self.sanitiseURL(self.startingUrl):urlResultHomePage}
+        # configuring scanner to crawl as well as check the status. If false will only check status
+        self.canCrawlUrls = True
         
     
     def scan(self):
@@ -34,7 +37,9 @@ class Scanner:
     def isMoreToScan(self):
         return len(self.urlsToScan) > 0
 
-    
+    def setCanCrawlUrls(self, canCrawl):
+        self.canCrawlUrls = canCrawl
+
     def scanNext(self):
         urlToScan = self.getNextURLToScan()
         self.urlsScanned[self.sanitiseURL(urlToScan.getURL())] = urlToScan  
@@ -177,6 +182,9 @@ class Scanner:
         return True
 
     def sanitiseURL(self, url):
+        parsedUrl = urlparse(url)
+        if parsedUrl.scheme == '':
+            url = urljoin("https://", url)
         if self.treatUrlsWithEndingSlashSameAsWithout:
             if url.endswith('/'):
                 url = url.removesuffix('/')
@@ -195,4 +203,8 @@ class Scanner:
         return False
 
     def isAllowedToBeCrawled(self, url):
+
+        if self.canCrawlUrls is False:
+            return False
+
         return self.isInternal(url)

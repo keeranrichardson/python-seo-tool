@@ -6,6 +6,7 @@ import tkinter.scrolledtext as scrolledtext
 from reportGenerator import ReportGenerator
 from browserController import BrowserController
 from tkinter import filedialog
+from sitemapScanner import SitemapScanner
 
 
 class TkinterGui:
@@ -65,6 +66,12 @@ class TkinterGui:
         parseUrl = urlparse(urlToParse)
         #todo: add url validation, needs to have netloc and scheme
         self.scanner = Scanner(urlToParse, parseUrl.netloc)
+
+        sitemapScanner = SitemapScanner(urlToParse)
+        if sitemapScanner.isSitemap():
+            sitemapScanner.addSitemapUrlsToScan(self.scanner)
+            self.scanner.setCanCrawlUrls(False)
+
         self.startScanBtn["state"] = "disabled"
         self.btn2["state"] = "disabled"
         self.continueScan()
