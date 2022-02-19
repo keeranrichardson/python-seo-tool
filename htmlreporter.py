@@ -45,6 +45,8 @@ class HTMLReporter:
 
         results = self.scannerResult.getInternalLinkResults()
 
+        self.makeStatusCodeSection()
+
         self.addSummaryCountLine("Number of internal URLs found", len(results))
 
         internalUrlsReportSection = self.createHTMLSection("Internal URLs found:", results)
@@ -52,7 +54,7 @@ class HTMLReporter:
 
         results = self.scannerResult.getExternalLinkResults()
 
-        self.addSummaryCountLine("Number of enternal URLs found", len(results))
+        self.addSummaryCountLine("Number of external URLs found", len(results))
 
         externalUrlsReportSection = self.createHTMLSection("External URLs found:", results)
         htmlSections.append(externalUrlsReportSection)
@@ -85,6 +87,13 @@ class HTMLReporter:
         html = top + scannerStartDateLine + timeDifferenceLine + self.getSummaryCountSection()  + self.getTableOfContents() + " ".join(htmlSections) + bottom
         return html
 
+    def makeStatusCodeSection(self):
+        statusCodes = self.scannerResult.getAllStatusCodes()
+        for statusCode in statusCodes:
+            amount = len(self.scannerResult.getAllResultsOfStatusCode(statusCode))
+            self.addSummaryCountLine(str(statusCode)+"s", amount)
+
+
     def getSummaryCountSection(self):
         summaryCountSection = "<h2>Summary</h2><ul>"+"\n".join(self.summaryCountLines)+"</ul>"
         return summaryCountSection
@@ -116,7 +125,7 @@ class HTMLReporter:
 
         middle +="<ul>"
     
-        lineTemplate = "<li>{} {} [{}] {}</li>"
+        lineTemplate = "<li>{} {} {} {}</li>"
 
         statusCodeLinks = {}
 
@@ -129,14 +138,18 @@ class HTMLReporter:
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
 
-            parentUrls = "found on: "
-            commaString = ""
-            for urlTuple in result.getParentUrls():
-                parentUrls += commaString + self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + urlTuple.text + "'"
-                commaString = ", "   
+            parentUrls = ""
+            if len(result.getParentUrls()) > 0:
+                parentUrls = "<ul><li>found on:<ul>" 
+
+                newLine = ""
+                for urlTuple in result.getParentUrls():
+                    parentUrls += newLine +"<li>"+ self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + urlTuple.text + "'</li>"
+                    newLine = "\n" 
+                parentUrls += "</ul></li></ul>"  
 
             if result.getRedirectLocation() != None:
-                redirectsTo = "Redirects to: "+self.aTag(result.getRedirectLocation(), result.getRedirectLocation())
+                redirectsTo = "<ul><li>redirects to:<ul>"+"<li>"+self.aTag(result.getRedirectLocation(), result.getRedirectLocation())+"</li></ul></li></ul>"
             else:
                 redirectsTo = ""
 

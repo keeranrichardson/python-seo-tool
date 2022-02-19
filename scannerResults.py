@@ -14,6 +14,24 @@ class ScannerResults:
     def getResults(self):
         return self.results
 
+    def getAllStatusCodes(self):
+        
+        statusCodes = []
+        for result in self.results:
+            statusCodes.append(result.getStatusCode())
+        
+        return set(statusCodes)
+
+    def getAllResultsOfStatusCode(self, statusCode):
+
+        results = []
+        for result in self.results:
+            if result.getStatusCode() == statusCode:
+                results.append(result)
+
+        return results
+            
+
     def getInternalLinkResults(self):
         results = []
         for result in self.getLinkResults():
