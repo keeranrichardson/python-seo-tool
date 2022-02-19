@@ -3,6 +3,8 @@ import datetime
 class HTMLReporter:
     def __init__(self, scannerResults):
         self.scannerResult = scannerResults
+        self.summaryCountLines = []
+        self.tableOfContentsList = []
     
     def aTag(self, url, text):
         tag = "<a href = '"+url+"' target='_blank'>"+text+"</a>"
@@ -42,49 +44,75 @@ class HTMLReporter:
         htmlSections = []
 
         results = self.scannerResult.getInternalLinkResults()
-        numberOfInternalUrlsFoundLine = "<p>Number of internal URLs found = {}</p>".format(len(results))
-        summaryCountLines.append(numberOfInternalUrlsFoundLine)
+
+        self.addSummaryCountLine("Number of internal URLs found", len(results))
 
         internalUrlsReportSection = self.createHTMLSection("Internal URLs found:", results)
         htmlSections.append(internalUrlsReportSection)
 
         results = self.scannerResult.getExternalLinkResults()
-        numberOfExternalUrlsFoundLine = "<p>Number of enternal URLs found = {}</p>".format(len(results))
-        summaryCountLines.append(numberOfExternalUrlsFoundLine)
+
+        self.addSummaryCountLine("Number of enternal URLs found", len(results))
 
         externalUrlsReportSection = self.createHTMLSection("External URLs found:", results)
         htmlSections.append(externalUrlsReportSection)
 
         imageResults = self.scannerResult.getImageResults()
-        summaryCountLines.append( "<p>Number of Images found = {}</p>".format(len(imageResults)))
+
+        self.addSummaryCountLine("Number of Images found", len(imageResults))
 
         imagesReportSection = self.createHTMLSection("Images found:", imageResults)
         htmlSections.append(imagesReportSection)
 
         headLinkResults = self.scannerResult.getHeadLinkResults()
-        summaryCountLines.append("<p>Number of Head Links found = {}</p>".format(len(headLinkResults)))
+        self.addSummaryCountLine("Number of Head Links found", len(headLinkResults))
 
         headLinksReportSection = self.createHTMLSection("Head Links found:", headLinkResults)
         htmlSections.append(headLinksReportSection)
 
         scriptResults = self.scannerResult.getScriptResults()
-        summaryCountLines.append("<p>Number of Scripts found = {}</p>".format(len(scriptResults)))
+        self.addSummaryCountLine("Number of Scripts found", len(scriptResults))
 
         scriptsReportSection = self.createHTMLSection("Scripts found:", scriptResults)
         htmlSections.append(scriptsReportSection)
 
         iFrameResults = self.scannerResult.getIFrameResults()
-        summaryCountLines.append("<p>Number of IFrames found = {}</p>".format(len(iFrameResults)))
+        self.addSummaryCountLine("Number of IFrames found", len(iFrameResults))
 
         iFrameReportSection = self.createHTMLSection("IFrames found:", iFrameResults)
         htmlSections.append(iFrameReportSection)
 
-        html = top + scannerStartDateLine + timeDifferenceLine + " ".join(summaryCountLines)  + " ".join(htmlSections) + bottom
+        html = top + scannerStartDateLine + timeDifferenceLine + self.getSummaryCountSection()  + self.getTableOfContents() + " ".join(htmlSections) + bottom
         return html
+
+    def getSummaryCountSection(self):
+        summaryCountSection = "<h2>Summary</h2><ul>"+"\n".join(self.summaryCountLines)+"</ul>"
+        return summaryCountSection
+
+    def addSummaryCountLine(self, title, number):
+        lineTemplate = "<li>{} = {}</li>"
+        line = lineTemplate.format(title, number)
+
+        self.summaryCountLines.append(line)
+
+    def getTableOfContents(self):
+        
+        tableOfContents = "<h2>Table of Contents</h2><ul>"+"\n".join(self.tableOfContentsList)+"</ul>"
+        return tableOfContents
+
+    def addToTableOfContents(self, hash, displayText):
+        
+        lineTemplate = "<li><a href='#{}'>{}</a></li>"
+        line = lineTemplate.format(hash, displayText)
+
+        self.tableOfContentsList.append(line)
+
     
     def createHTMLSection(self, title, results):
 
-        middle = "<h2>" + title + "</h2>"
+        self.addToTableOfContents(title, title)
+
+        middle = "<h2 id='"+title+"'>" + title + "</h2>"
 
         middle +="<ul>"
     
