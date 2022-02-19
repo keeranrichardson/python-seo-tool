@@ -24,6 +24,7 @@ class TkinterGui:
         entryFrame = tk.Frame(self.window)
 
         self.txtfld=tk.Entry(entryFrame)
+        self.txtfld.insert(0, self.configParams.getUrlToParse())
         self.txtfld.pack(fill = 'x')
 
         entryFrame.pack(padx = 20, fill = 'x')
@@ -31,7 +32,7 @@ class TkinterGui:
         tk.Label(text="Select rate limiting value (milliseconds):").pack()
 
         self.rateLimitValue = tk.IntVar()
-        self.rateLimitValue.set(0)
+        self.rateLimitValue.set(self.configParams.getRateLimit())
         self.rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500, 0)
         self.rateLimitMenu.pack()
 
@@ -40,6 +41,7 @@ class TkinterGui:
         tk.Label(enterFileNameFrame, text="Enter file name of HTML report:").pack()
 
         self.enterPath=tk.Entry(enterFileNameFrame)
+        self.enterPath.insert(0, self.configParams.getHTMLReportFileName())
         self.enterPath.pack(fill = 'x')
 
         enterFileNameFrame.pack(padx = 20, fill = 'x')
