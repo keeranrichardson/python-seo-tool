@@ -1,0 +1,3 @@
+pytest
+bs4
+requests
