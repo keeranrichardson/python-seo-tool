@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from urllib.parse import urljoin
 import datetime
 from scannerResults import ScannerResults
+import time
 
 class Scanner:
     def __init__(self, url, restrictToDomain):
@@ -26,6 +27,7 @@ class Scanner:
         self.urlsFound = {self.sanitiseURL(self.startingUrl):urlResultHomePage}
         # configuring scanner to crawl as well as check the status. If false will only check status
         self.canCrawlUrls = True
+        self.rateLimitSeconds = 0
         
     
     def scan(self):
@@ -33,9 +35,13 @@ class Scanner:
             events = self.scanNext()
             for event in events:
                 print(event)
+            time.sleep(self.rateLimitSeconds)
             
     def isMoreToScan(self):
         return len(self.urlsToScan) > 0
+
+    def setRateLimitMilliseconds(self, milliseconds):
+        self.rateLimitSeconds = int(milliseconds)/1000
 
     def setCanCrawlUrls(self, canCrawl):
         self.canCrawlUrls = canCrawl

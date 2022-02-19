@@ -32,10 +32,25 @@ class ConfigParams:
 
         return urlToReturn.strip()
 
+    def getRateLimit(self):
+        return self.vargs["rateLimit"]
+
+    def getOpenReport(self):
+        return bool(self.vargs["openReport"])
+
     def getDefaultConfigParams(self):
         self.getConfigParamsFromCommandLineArguments()
 
         return
+
+    def ensureBooleanValue(self, aValue):
+
+        # if it is a boolean return it
+        if isinstance(aValue,(int)):
+            return aValue
+
+        return aValue.lower()=="true"
+    
 
     def getConfigParamsFromCommandLineArguments(self):
         parser = argparse.ArgumentParser(description='Scan site for URLs')
@@ -43,9 +58,16 @@ class ConfigParams:
         parser.add_argument('-filename', default=self.getCurrentDateString(), help='the filename of the html report output file')
         parser.add_argument('-cmd', default=False, help='run the program from the command line')
         parser.add_argument('-reportPath', default='', help='path where HTML report will be stored')
+        parser.add_argument('-rateLimit', default=0, help='milliseconds to wait between scans')
+        parser.add_argument('-openReport', default=True, help='automatically opens report when finished')
 
         self.args = parser.parse_args()
         self.vargs = vars(self.args)
+
+        # argsparse returns String from command line, but boolean from defaults
+        self.vargs["cmd"] = self.ensureBooleanValue(self.vargs["cmd"])
+        self.vargs["openReport"] = self.ensureBooleanValue(self.vargs["openReport"])
+
         print(self.args)
 
     def getCurrentDateString(self):
@@ -65,6 +87,7 @@ class ConfigParams:
         return fileName
 
     def isGui(self):
+
         return not self.vargs["cmd"]
 
     def setUrl(self, urlToParse):
@@ -78,6 +101,9 @@ class ConfigParams:
 
     def setReportFileName(self, newFileName):
         self.vargs["filename"] = newFileName
+
+    def setRateLimit(self, rateLimit):
+        self.vargs["rateLimit"] = rateLimit
 
         
 

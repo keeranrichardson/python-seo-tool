@@ -16,7 +16,7 @@ configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
 
-if configParams.isGui():
+if configParams.isGui() == True:
     gui = TkinterGui(configParams)
     gui.showGui()
 else:
@@ -31,6 +31,8 @@ else:
 
     parseUrl = urlparse(urlToParse)
     scanner = Scanner(urlToParse, parseUrl.netloc)
+
+    scanner.setRateLimitMilliseconds(configParams.getRateLimit())
     
     # if sitemap, do not crawl urls found
     sitemapScanner = SitemapScanner(urlToParse)
@@ -43,6 +45,9 @@ else:
     report = ReportGenerator(configParams, scanner)
     report.generateReport()
 
-    BrowserController().open(report.getPathAndFileName())
+    print("Report written to " + report.getPathAndFileName())
+
+    if configParams.getOpenReport():
+        BrowserController().open(report.getPathAndFileName())
 
     #todos
