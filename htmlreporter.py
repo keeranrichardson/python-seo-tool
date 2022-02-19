@@ -144,7 +144,7 @@ class HTMLReporter:
 
                 newLine = ""
                 for urlTuple in result.getParentUrls():
-                    parentUrls += newLine +"<li>"+ self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + urlTuple.text + "'</li>"
+                    parentUrls += newLine +"<li>"+ self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + str(urlTuple.text) + "'</li>"
                     newLine = "\n" 
                 parentUrls += "</ul></li></ul>"  
 

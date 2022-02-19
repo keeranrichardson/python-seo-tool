@@ -49,8 +49,12 @@ class WebPage:
             href = link.get('href')
             # todo: report if href is none
             if href is not None:
+                if len(link.contents) == 0:
+                    linkContents = "MISSING"
+                else:
+                    linkContents = link.contents[0]
                 LinkTuple = namedtuple("LinkTuple", ["url","text","parentPage"])
-                aLinkTuple = LinkTuple(self.makeFullUrl(self.url,href), link.contents[0], self.url)
+                aLinkTuple = LinkTuple(self.makeFullUrl(self.url,href), linkContents, self.url)
                 self.urlsFound.append(aLinkTuple)
         
         return self.urlsFound

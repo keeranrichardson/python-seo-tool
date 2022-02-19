@@ -28,13 +28,21 @@ class Scanner:
         # configuring scanner to crawl as well as check the status. If false will only check status
         self.canCrawlUrls = True
         self.rateLimitSeconds = 0
+        # events to log
+        self.events=[]
         
+    def clearEvents(self):
+        self.events = []
+
+    def logEvent(self, eventToLog):
+        print(eventToLog)
+        self.events.append(eventToLog)
     
     def scan(self):
         while self.isMoreToScan():
             events = self.scanNext()
-            for event in events:
-                print(event)
+            '''for event in events:
+                print(event)'''
             time.sleep(self.rateLimitSeconds)
             
     def isMoreToScan(self):
@@ -62,7 +70,9 @@ class Scanner:
     # get all links on page of URL
     # each link becomes processing URL
     def scanPage(self, urlResult):
-        events=[]
+        self.clearEvents()
+
+        self.logEvent("About to check "+ urlResult.getURL())
 
         webPage = WebPage(urlResult.getURL())
         webPageUrl = self.sanitiseURL(webPage.getURL())
@@ -79,41 +89,41 @@ class Scanner:
                 # add loxation to urlresult
                 urlResult.setRedirectLocation(webPage.getRedirectLocation())
                 aLink = webPage.getRedirectLocation()
-                events.append(webPageUrl + " redirects to: " + aLink)
+                self.logEvent(webPageUrl + " redirects to: " + aLink)
                 # follow like normal link
 
                 self.addUrlToScanAndFoundQueues(aLink)
 
-                events.append("number of links to scan: 1 on " + webPageUrl)
+                self.logEvent("number of links to scan: 1 on " + webPageUrl)
 
             else:
                 if self.isAllowedToBeCrawled(webPageUrl):
                     # links
                     # do not add if already checked
 
-                    self.addResultsToCrawl(events, webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
+                    self.addResultsToCrawl(webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
                     
                     # images
 
-                    self.addResultsToCrawl(events, webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
+                    self.addResultsToCrawl(webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
 
                     # headlinks
 
-                    self.addResultsToCrawl(events, webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
+                    self.addResultsToCrawl(webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
 
                     # scripts
 
-                    self.addResultsToCrawl(events, webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
+                    self.addResultsToCrawl(webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
 
                     # iframes
 
-                    self.addResultsToCrawl(events, webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
+                    self.addResultsToCrawl(webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
                     
 
         self.urlsStatusChecked[webPageUrl] = urlResult
         
-        events.append("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl + " " + str(urlResult.isInternal()))
-        return events
+        self.logEvent("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl + " " + str(urlResult.isInternal()))
+        return self.events
     
     def addUrlToScanAndFoundQueues(self, url):
         sanitisedALink = self.sanitiseURL(url)
@@ -126,9 +136,9 @@ class Scanner:
 
         return False
 
-    def addResultsToCrawl(self, events, foundResults, typeOfResult, webPageUrl,tupleVal, callback):
+    def addResultsToCrawl(self, foundResults, typeOfResult, webPageUrl,tupleVal, callback):
 
-        events.append("found " + str(len(foundResults)) + " " + typeOfResult + " on " + webPageUrl)
+        self.logEvent("found " + str(len(foundResults)) + " " + typeOfResult + " on " + webPageUrl)
         resultsToProcess = 0
 
         for aTuple in foundResults:
@@ -136,7 +146,7 @@ class Scanner:
                 resultsToProcess += 1
             callback(aTuple, webPageUrl)
 
-        events.append("number of " + typeOfResult + " to scan: " + str(resultsToProcess) + " on " + webPageUrl)
+        self.logEvent("number of " + typeOfResult + " to scan: " + str(resultsToProcess) + " on " + webPageUrl)
 
     def addParentToPage(self,aLinkTuple,parentPageUrl):
         # add parent link to urlresult object
