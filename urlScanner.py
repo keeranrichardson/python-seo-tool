@@ -1,12 +1,19 @@
 import requests
 
 class UrlScanner:
-    '''
-
+    """Gets the status code and location of a link
+    
     Url Scanner issues a head request that allows us
     to get information like status code and location.
+    
+    Typical usage example:
+    
+    urlScanner = UrlScanner(url)
+    redirectLocation = urlScanner.getLocation()
 
-    '''
+    Attributes:
+        url: the url that you want the status code or location of
+    """
     def __init__(self, url):
         self.url = url
         self.response = None

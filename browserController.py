@@ -6,6 +6,16 @@ import webbrowser
 #https://stackoverflow.com/questions/29823028/attributeerror-module-object-has-no-attribute-startfile
 
 class BrowserController:
+    """Opens the browser to display a file
+    
+    The method open() is cross platform between Windows, Mac and Linux.
+    open() trys multiple methods to open the default browser.
+    
+    Typical usage example:
+    
+    BrowserController().open(fileNameString)
+    """
+
     def __init__(self):
         ''
 

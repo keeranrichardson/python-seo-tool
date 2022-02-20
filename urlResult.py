@@ -1,6 +1,28 @@
 from collections import namedtuple
 
 class UrlResult:
+    """Tracks status code and attributes for a scanned url
+    
+    Helps distinguish different types of links.
+
+    eg:
+
+    - iframe
+    - image
+    - script
+
+    This class also tracks other important attributes like parent url or
+    if its a redirect urlwhich can be used in the HTML report
+    
+    Typical usage example:
+    
+    result = UrlResult(link, 0)
+    result.setUrlAsImage()
+
+    Attributes:
+        url: The url that has been scanned
+        statusCode: The status code of the url that has been scanned
+    """
     def __init__(self, url, statusCode):
         self.url = url
         self.statusCode = statusCode

@@ -6,6 +6,19 @@ import requests
 from urlScanner import UrlScanner
 
 class WebPage:
+    """Finds the different types of links on a page
+    
+    This is the class that makes the http request for the HTML of a page and filters the different
+    types of links from the HTML.
+    
+    Typical usage example:
+    
+    webPage = WebPage(url)
+    images = webPage.findImages()
+
+    Attributes:
+        url: the url that you want to get the links on
+    """
     def __init__(self, url):
         self.url = url
         self.urlScanner = UrlScanner(self.url)

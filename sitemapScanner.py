@@ -4,6 +4,20 @@ from validateUrl import ValidateUrl
 
 
 class SitemapScanner:
+    """Loads and finds all links in sitemaps
+    
+    This class determines whether a link is a sitemap and adds the urls found
+    on a sitemap to be scanned by a Scanner object.
+    
+    Typical usage example:
+    
+    sitemapScanner = SitemapScanner("https://mywebsite.com/sitemap.xml")
+    if sitemapScanner.isSitemap():
+        sitemapScanner.addSitemapUrlsToScan(scanner)
+
+    Attributes:
+        url: The url that is being scanned
+    """
     def __init__(self, url):
         self.url = url
 

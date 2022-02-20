@@ -2,12 +2,23 @@ import datetime
 import re
 import argparse
 
-# read prameters from command line with defaults if parameters are missing eg:
-# python main.py -url https://keeranrichardson.com -cmd true
-# or
-# python main.py -url https://keeranrichardson.com -cmd=True
-
 class ConfigParams:
+    """Module to store all configuration parameters
+
+    read parameters from command line with defaults if parameters are missing eg:
+
+    python main.py -url https://keeranrichardson.com -cmd true
+
+    or
+
+    python main.py -url https://keeranrichardson.com -cmd=True
+    
+    Typical usage example:
+    
+    configParams = ConfigParams()
+    configParams.getDefaultConfigParams()
+    urlToParse = configParams.getUrlToParse()
+    """
     def __init__(self):
         self.vargs = {}
 

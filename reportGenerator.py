@@ -2,8 +2,21 @@ import os
 from folderUtils import FolderUtils
 from htmlreporter import HTMLReporter
 
-
 class ReportGenerator:
+    """Writes the HTML report to a file
+    
+    This class triggers the HTML report generation and writes it to a file.
+    The file is configured by the configuration parameters.
+    
+    Typical usage example:
+    
+    report = ReportGenerator(configParams, scanner)
+    report.generateReport()
+
+    Attributes:
+        configParams: The ConfigParams object which is used to configure the output report
+        scanner: The Scanner object which is used to get results
+    """
     def __init__(self, configParams, scanner):
         self.configParams = configParams
         self.scanner = scanner

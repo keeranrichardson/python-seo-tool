@@ -1,4 +1,18 @@
 class HTMLReporter:
+
+    """Generates the HTML for an HTML report
+    
+    This class parses the scanner result and reports them in a user-friendly format.
+    This class does not write the HTML report, it generates the HTML string.
+    
+    Typical usage example:
+    
+    report = HTMLReporter(self.scanner.getResults()).makeReport()
+
+    Attributes:
+        scannerResults: a ScannerResults objects
+    """
+
     def __init__(self, scannerResults):
         self.scannerResult = scannerResults
         self.summaryCountLines = []

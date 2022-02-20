@@ -1,6 +1,21 @@
 import datetime
 
 class ScannerResults:
+    """stores the results of the scan
+    
+    This class stores the results of the scan and allows you to get filtered results.
+
+    eg:
+
+    - get all external links
+    - get all internal links
+    - get all links with a particular status code
+    
+    Typical usage example:
+    
+    results = ScannerResults()
+    results.addResult(urlResult)
+    """
     def __init__(self):
         self.results = [] # UrlResult Array
         self.startDateTime = datetime.datetime.now()

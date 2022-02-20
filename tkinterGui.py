@@ -10,6 +10,19 @@ from validateUrl import ValidateUrl
 
 
 class TkinterGui:
+    """The tkinter GUI for the application
+    
+    This class creates the tkinter GUI for the tool and handles the scan
+    through the tool.
+    
+    Typical usage example:
+    
+    gui = TkinterGui(configParams)
+    gui.showGui()
+
+    Attributes:
+        configParams: A ConfigParams object
+    """
     def __init__(self, configParams):
         self.configParams = configParams
         self.scanIsActive = False

@@ -5,6 +5,19 @@ from urlResult import UrlResult
 from scannerResults import ScannerResults
 
 class Scanner:
+    """Scan and crawl the websites
+    
+    This class does all the work for the scanning of the website.
+    
+    Typical usage example:
+    
+    scanner = Scanner(urlToParse, parseUrl.netloc)
+    scanner.scan()
+
+    Attributes:
+        url: The url that is being scanned
+        restrictToDomain: The domain that we do not want to scan outside of
+    """
     def __init__(self, url, restrictToDomain):
         # config for handling urls with slash at end
         self.treatUrlsWithEndingSlashSameAsWithout = False
