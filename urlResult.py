@@ -42,6 +42,8 @@ class UrlResult:
         self.statusCode = aStatusCode
 
     def getParentUrl(self):
+        if len(self.parentUrls) is 0:
+            return None
         return self.parentUrls[0]
 
     def getParentUrls(self):
