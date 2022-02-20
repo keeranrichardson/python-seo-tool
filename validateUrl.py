@@ -3,11 +3,11 @@ from urllib.parse import urlparse
 
 class ValidateUrl:
     """Determines whether a url can be scanned and makes the url valid
-    
+
     This class can make a url valid and can determine whether a url can be scanned
-    
+
     Typical usage example:
-    
+
     urlValidator = ValidateUrl(url)
     if not urlValidator.canUrlBeScanned():
         print("url cannot be scanned")

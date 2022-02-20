@@ -103,7 +103,7 @@ class Scanner:
                 self.logEvent("number of links to scan: 1 on " + webPageUrl)
 
             else:
-                if self.isAllowedToBeCrawled(webPageUrl):
+                if urlResult.isLink() and self.isAllowedToBeCrawled(webPageUrl):
 
                     self.addResultsToCrawl(webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
                     self.addResultsToCrawl(webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)

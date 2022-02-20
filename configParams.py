@@ -86,12 +86,19 @@ class ConfigParams:
         return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
     def getAsHtmlFileName(self, fileNameStr):
+
+        # if user inputted filename with .html already at the end, do not add .html to the end
         suffix = ".html"
         if fileNameStr.endswith(suffix):
             suffix = ''
 
-        fileName = re.sub('[^A-Za-z0-9_\-\.]+', '', fileNameStr)+suffix
+        # https://docs.python.org/3/library/re.html
+        # https://stackoverflow.com/questions/5843518/remove-all-special-characters-punctuation-and-spaces-from-string
+        # use a regular expression to filter out any invalid filename characters
 
+        fileName = re.sub('[^A-Za-z0-9_\\-\\.]+', '', fileNameStr)+suffix
+
+        # if trimmed filename is empty, then make the filename the default as the current date and time
         if fileName == '.html':
             fileName = self.getCurrentDateString()+'.html'
 

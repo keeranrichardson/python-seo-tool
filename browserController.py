@@ -7,12 +7,12 @@ import webbrowser
 
 class BrowserController:
     """Opens the browser to display a file
-    
+
     The method open() is cross platform between Windows, Mac and Linux.
     open() trys multiple methods to open the default browser.
-    
+
     Typical usage example:
-    
+
     BrowserController().open(fileNameString)
     """
 
