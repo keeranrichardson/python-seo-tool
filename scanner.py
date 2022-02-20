@@ -198,9 +198,7 @@ class Scanner:
         return True
 
     def sanitiseURL(self, url):
-        parsedUrl = urlparse(url)
-        if parsedUrl.scheme == '':
-            url = urljoin("https://", url)
+        
         if self.treatUrlsWithEndingSlashSameAsWithout:
             if url.endswith('/'):
                 url = url.removesuffix('/')

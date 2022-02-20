@@ -10,7 +10,7 @@ import tkinter as tk
 from tkinterGui import TkinterGui
 from reportGenerator import ReportGenerator
 from sitemapScanner import SitemapScanner
-
+from validateUrl import ValidateUrl
 
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
@@ -25,6 +25,15 @@ else:
 
     if urlToParse == '':
         print("error: This tool needs a url to scan, you did not enter a url")
+        exit()
+
+    urlValidator = ValidateUrl(urlToParse)
+    if not urlValidator.canUrlBeScanned():
+        urlToParse = urlValidator.tryAndMakeValidUrl()
+
+    urlValidator = ValidateUrl(urlToParse)
+    if not urlValidator.canUrlBeScanned():
+        print("error: url is not valid " + urlToParse)
         exit()
 
     configParams.setUrl(urlToParse)

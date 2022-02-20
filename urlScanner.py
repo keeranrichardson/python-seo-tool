@@ -16,7 +16,7 @@ class UrlScanner:
     def getStatus(self):
         try:
             if self.response is None:
-                self.response = requests.head(self.url, allow_redirects=False)
+                self.response = requests.head(self.url, allow_redirects=False, timeout=10)
             if self.response.status_code in [301,302,307,308]:
                 self.location = self.response.headers['Location']
 

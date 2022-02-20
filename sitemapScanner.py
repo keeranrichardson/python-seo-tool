@@ -1,5 +1,7 @@
 import advertools as adv
-# https://advertools.readthedocs.io/en/master/advertools.sitemaps.html
+# https://advertools.readthedocs.io/en/master/advertools.sitemaps.htmldfas
+from validateUrl import ValidateUrl
+
 
 class SitemapScanner:
     def __init__(self, url):
@@ -14,4 +16,14 @@ class SitemapScanner:
         sitemap = adv.sitemap_to_df(self.url)
         urlList = sitemap['loc'].tolist()
         for url in urlList:
-            scanner.addUrlToScanAndFoundQueues(url)
+            validator = ValidateUrl(url)
+
+            if validator.canUrlBeScanned() == False:
+                url = validator.tryAndMakeValidUrl()
+
+            validator = ValidateUrl(url)    
+
+            if validator.canUrlBeScanned():
+                scanner.addUrlToScanAndFoundQueues(url)
+            else:
+                print("error: found invalid URL in Sitemap " + url)

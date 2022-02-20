@@ -7,6 +7,7 @@ from reportGenerator import ReportGenerator
 from browserController import BrowserController
 from tkinter import filedialog
 from sitemapScanner import SitemapScanner
+from validateUrl import ValidateUrl
 
 
 class TkinterGui:
@@ -183,17 +184,6 @@ class TkinterGui:
 
     def getCurrentHTMLReportPath(self):
         return ReportGenerator(self.configParams, None).getPath()
-
-class ValidateUrl:
-    def __init__(self, url):
-        self.url = url
-
-    def canUrlBeScanned(self):
-        parseUrl = urlparse(self.url)
-        if parseUrl.netloc != '' and parseUrl.scheme != '':
-            return True
-        else:
-            return False
 
 
 
