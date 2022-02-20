@@ -1,12 +1,7 @@
-from requests.models import parse_url
+from urllib.parse import urlparse
 from scanner import Scanner
-from htmlreporter import HTMLReporter
 from browserController import BrowserController
 from configParams import ConfigParams
-from folderUtils import FolderUtils
-from urllib.parse import urlparse
-import os
-import tkinter as tk
 from tkinterGui import TkinterGui
 from reportGenerator import ReportGenerator
 from sitemapScanner import SitemapScanner
@@ -16,7 +11,7 @@ configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
 
-if configParams.isGui() == True:
+if configParams.isGui() is True:
     gui = TkinterGui(configParams)
     gui.showGui()
 else:
@@ -42,7 +37,7 @@ else:
     scanner = Scanner(urlToParse, parseUrl.netloc)
 
     scanner.setRateLimitMilliseconds(configParams.getRateLimit())
-    
+
     # if sitemap, do not crawl urls found
     sitemapScanner = SitemapScanner(urlToParse)
     if sitemapScanner.isSitemap():
@@ -50,7 +45,7 @@ else:
         scanner.setCanCrawlUrls(False)
 
     scanner.scan()
-    
+
     report = ReportGenerator(configParams, scanner)
     report.generateReport()
 

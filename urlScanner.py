@@ -1,13 +1,12 @@
 import requests
 
-'''
-
-Url Scanner issues a head request that allows us
-to get information like status code and location.
-
-'''
-
 class UrlScanner:
+    '''
+
+    Url Scanner issues a head request that allows us
+    to get information like status code and location.
+
+    '''
     def __init__(self, url):
         self.url = url
         self.response = None

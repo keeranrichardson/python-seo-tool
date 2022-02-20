@@ -1,12 +1,8 @@
-from requests.models import parse_url
-from webPage import WebPage
-from urlScanner import UrlScanner
-from urlResult import UrlResult
 from urllib.parse import urlparse
-from urllib.parse import urljoin
-import datetime
-from scannerResults import ScannerResults
 import time
+from webPage import WebPage
+from urlResult import UrlResult
+from scannerResults import ScannerResults
 
 class Scanner:
     def __init__(self, url, restrictToDomain):
@@ -30,21 +26,19 @@ class Scanner:
         self.rateLimitSeconds = 0
         # events to log
         self.events=[]
-        
+
     def clearEvents(self):
         self.events = []
 
     def logEvent(self, eventToLog):
         print(eventToLog)
         self.events.append(eventToLog)
-    
+
     def scan(self):
         while self.isMoreToScan():
-            events = self.scanNext()
-            '''for event in events:
-                print(event)'''
+            self.scanNext()
             time.sleep(self.rateLimitSeconds)
-            
+
     def isMoreToScan(self):
         return len(self.urlsToScan) > 0
 
@@ -56,7 +50,7 @@ class Scanner:
 
     def scanNext(self):
         urlToScan = self.getNextURLToScan()
-        self.urlsScanned[self.sanitiseURL(urlToScan.getURL())] = urlToScan  
+        self.urlsScanned[self.sanitiseURL(urlToScan.getURL())] = urlToScan
         return self.scanPage(urlToScan)
 
     def getNextURLToScan(self):
@@ -82,16 +76,15 @@ class Scanner:
 
         if webPage.isUrlScannable():
             self.results.addUrlScanned(webPageUrl)
-            
-        
-            # todo: refactor to remove duplicate code
+
             if urlResult.statusCode in [301, 302, 307, 308]:
-                # add loxation to urlresult
+
+                # add location to urlresult
                 urlResult.setRedirectLocation(webPage.getRedirectLocation())
                 aLink = webPage.getRedirectLocation()
                 self.logEvent(webPageUrl + " redirects to: " + aLink)
-                # follow like normal link
 
+                # follow like normal link
                 self.addUrlToScanAndFoundQueues(aLink)
 
                 self.logEvent("number of links to scan: 1 on " + webPageUrl)
@@ -102,7 +95,7 @@ class Scanner:
                     # do not add if already checked
 
                     self.addResultsToCrawl(webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
-                    
+
                     # images
 
                     self.addResultsToCrawl(webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
@@ -118,13 +111,13 @@ class Scanner:
                     # iframes
 
                     self.addResultsToCrawl(webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
-                    
+
 
         self.urlsStatusChecked[webPageUrl] = urlResult
-        
+
         self.logEvent("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl + " " + str(urlResult.isInternal()))
         return self.events
-    
+
     def addUrlToScanAndFoundQueues(self, url):
         sanitisedALink = self.sanitiseURL(url)
         if self.shouldAddToScanQueue(sanitisedALink):
@@ -198,7 +191,7 @@ class Scanner:
         return True
 
     def sanitiseURL(self, url):
-        
+
         if self.treatUrlsWithEndingSlashSameAsWithout:
             if url.endswith('/'):
                 url = url.removesuffix('/')

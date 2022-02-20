@@ -1,18 +1,16 @@
-import datetime
-
 class HTMLReporter:
     def __init__(self, scannerResults):
         self.scannerResult = scannerResults
         self.summaryCountLines = []
         self.tableOfContentsList = []
-    
+
     def aTag(self, url, text):
         tag = "<a href = '"+url+"' target='_blank'>"+text+"</a>"
 
         return tag
-        
+
     def makeReport(self):
-        
+
         top = '''
                 <html>
                     <head>
@@ -26,7 +24,7 @@ class HTMLReporter:
         bottom = '''
                     </body>
                 </html>'''
-    
+
         scannerStartDateLine = "<h2>Date and time of scan: {}</h2>\n".format(self.scannerResult.getStartDateTime())
 
 # https://stackoverflow.com/questions/538666/format-timedelta-to-string
@@ -39,8 +37,6 @@ class HTMLReporter:
         duration = '{:02} hours, {:02} minutes, {:02} seconds'.format(hours, minutes, seconds)
         timeDifferenceLine = "<p>Duration of scan: {}</p>".format(duration)
 
-
-        summaryCountLines = []
         htmlSections = []
 
         results = self.scannerResult.getInternalLinkResults()
@@ -105,18 +101,18 @@ class HTMLReporter:
         self.summaryCountLines.append(line)
 
     def getTableOfContents(self):
-        
+
         tableOfContents = "<h2>Table of Contents</h2><ul>"+"\n".join(self.tableOfContentsList)+"</ul>"
         return tableOfContents
 
-    def addToTableOfContents(self, hash, displayText):
-        
+    def addToTableOfContents(self, hashValue, displayText):
+
         lineTemplate = "<li><a href='#{}'>{}</a></li>"
-        line = lineTemplate.format(hash, displayText)
+        line = lineTemplate.format(hashValue, displayText)
 
         self.tableOfContentsList.append(line)
 
-    
+
     def createHTMLSection(self, title, results):
 
         self.addToTableOfContents(title, title)
@@ -124,7 +120,7 @@ class HTMLReporter:
         middle = "<h2 id='"+title+"'>" + title + "</h2>"
 
         middle +="<ul>"
-    
+
         lineTemplate = "<li>{} {} {} {}</li>"
 
         statusCodeLinks = {}
@@ -134,7 +130,7 @@ class HTMLReporter:
             if str(statusCode) not in statusCodeLinks:
                 statusCodeLinks[str(statusCode)] = ""
 
-            
+
             statusCodeLink = self.aTag("https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(result.getStatusCode()),str(result.getStatusCode()))
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
 
@@ -145,10 +141,10 @@ class HTMLReporter:
                 newLine = ""
                 for urlTuple in result.getParentUrls():
                     parentUrls += newLine +"<li>"+ self.aTag(urlTuple.url, str(urlTuple.url)) + " as: '" + str(urlTuple.text) + "'</li>"
-                    newLine = "\n" 
-                parentUrls += "</ul></li></ul>"  
+                    newLine = "\n"
+                parentUrls += "</ul></li></ul>"
 
-            if result.getRedirectLocation() != None:
+            if result.getRedirectLocation() is not None:
                 redirectsTo = "<ul><li>redirects to:<ul>"+"<li>"+self.aTag(result.getRedirectLocation(), result.getRedirectLocation())+"</li></ul></li></ul>"
             else:
                 redirectsTo = ""
@@ -156,15 +152,14 @@ class HTMLReporter:
             lineInMiddle = lineTemplate.format(statusCodeLink, resultUrlLink, parentUrls, redirectsTo)
             middle += lineInMiddle+"\n"
             statusCodeLinks[str(statusCode)] = statusCodeLinks[str(statusCode)] + lineInMiddle+"\n"
-        
+
         middle +="</ul>"
 
-        for statusCode in statusCodeLinks:
+        for statusCode, link in statusCodeLinks.items():
             middle += "\n<h3>"+statusCode+"s:</h3>\n"
             middle +="<ul>"
-            middle += statusCodeLinks[statusCode]
+            middle += link
             middle +="</ul>"
 
         return middle
-        
        

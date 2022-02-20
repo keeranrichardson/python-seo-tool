@@ -7,18 +7,19 @@ class ReportGenerator:
     def __init__(self, configParams, scanner):
         self.configParams = configParams
         self.scanner = scanner
+        self.pathAndFileName = ''
 
     def generateReport(self):
         fileName = self.configParams.getHTMLReportFileName()
         path = self.getPath()
 
         FolderUtils().createFolderIfNotExists(path)
-        
+
         #creates full directory
         self.pathAndFileName = os.path.join(path, fileName)
 
         #writes report to file
-        file = open(self.pathAndFileName, "w")
+        file = open(self.pathAndFileName, "w", encoding = "utf8")
         file.write(HTMLReporter(self.scanner.getResults()).makeReport())
         file.close()
 
@@ -36,3 +37,4 @@ class ReportGenerator:
             path = reportsFolder.getCWDPath(directory)
 
         return path
+        

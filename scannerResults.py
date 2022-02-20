@@ -15,11 +15,11 @@ class ScannerResults:
         return self.results
 
     def getAllStatusCodes(self):
-        
+
         statusCodes = []
         for result in self.results:
             statusCodes.append(result.getStatusCode())
-        
+
         return set(statusCodes)
 
     def getAllResultsOfStatusCode(self, statusCode):
@@ -30,7 +30,6 @@ class ScannerResults:
                 results.append(result)
 
         return results
-            
 
     def getInternalLinkResults(self):
         results = []
@@ -71,7 +70,7 @@ class ScannerResults:
 
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")
-    
+
     def getStartDateTimeRaw(self):
         return self.startDateTime
 
@@ -80,6 +79,6 @@ class ScannerResults:
 
     def addUrlScanned(self, url):
         self.urlsScanned.append(url)
-        
+
     def getUrlsScanned(self):
         return self.urlsScanned

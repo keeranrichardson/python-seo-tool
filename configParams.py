@@ -5,7 +5,7 @@ import argparse
 # read prameters from command line with defaults if parameters are missing eg:
 # python main.py -url https://keeranrichardson.com -cmd true
 # or
-# python main.py -url https://keeranrichardson.com -cmd=True 
+# python main.py -url https://keeranrichardson.com -cmd=True
 
 class ConfigParams:
     def __init__(self):
@@ -50,7 +50,7 @@ class ConfigParams:
             return aValue
 
         return aValue.lower()=="true"
-    
+
 
     def getConfigParamsFromCommandLineArguments(self):
         parser = argparse.ArgumentParser(description='Scan site for URLs')
@@ -61,14 +61,14 @@ class ConfigParams:
         parser.add_argument('-rateLimit', default=0, help='milliseconds to wait between scans')
         parser.add_argument('-openReport', default=True, help='automatically opens report when finished')
 
-        self.args = parser.parse_args()
-        self.vargs = vars(self.args)
+        args = parser.parse_args()
+        self.vargs = vars(args)
 
         # argsparse returns String from command line, but boolean from defaults
         self.vargs["cmd"] = self.ensureBooleanValue(self.vargs["cmd"])
         self.vargs["openReport"] = self.ensureBooleanValue(self.vargs["openReport"])
 
-        print(self.args)
+        print(args)
 
     def getCurrentDateString(self):
 
@@ -104,9 +104,3 @@ class ConfigParams:
 
     def setRateLimit(self, rateLimit):
         self.vargs["rateLimit"] = rateLimit
-
-        
-
-
-#todo: add unit tests
-#todo: default to /reports folder and store reports in default folder

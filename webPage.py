@@ -1,15 +1,17 @@
-from bs4 import BeautifulSoup
-import requests
 from urllib.parse import urljoin
 from urllib.parse import urlparse
-from urlScanner import UrlScanner
 from collections import namedtuple
+from bs4 import BeautifulSoup
+import requests
+from urlScanner import UrlScanner
 
 class WebPage:
     def __init__(self, url):
         self.url = url
         self.urlScanner = UrlScanner(self.url)
         self.statusCode = self.urlScanner.getStatus()
+        self.html = None
+        self.soup = None
 
     def isUrlScannable(self):
 
@@ -39,15 +41,21 @@ class WebPage:
     def makeFullUrl(self, base, end):
         return urljoin(base, end)
 
+    def getPage(self):
+        if self.html is None:
+            self.html = requests.get(self.url, allow_redirects=False).text
+        if self.soup is None:
+            self.soup = BeautifulSoup(self.html, "html.parser")
+        return
+
     def findLinks(self):
-        self.urlsFound = []
-        # todo: find links must be called before find images
-        self.html = requests.get(self.url, allow_redirects=False).text
-        self.soup = BeautifulSoup(self.html, "html.parser")
-        
+        urlsFound = []
+
+        self.getPage()
+
         for link in self.soup.find_all('a'):
             href = link.get('href')
-            # todo: report if href is none
+
             if href is not None:
                 if len(link.contents) == 0:
                     linkContents = "MISSING"
@@ -55,79 +63,86 @@ class WebPage:
                     linkContents = link.contents[0]
                 LinkTuple = namedtuple("LinkTuple", ["url","text","parentPage"])
                 aLinkTuple = LinkTuple(self.makeFullUrl(self.url,href), linkContents, self.url)
-                self.urlsFound.append(aLinkTuple)
-        
-        return self.urlsFound
-    
+                urlsFound.append(aLinkTuple)
+
+        return urlsFound
+
     def findImages(self):
-        self.imagesFound = []
+        imagesFound = []
+
+        self.getPage()
 
         for image in self.soup.find_all('img'):
             source = image.get('src')
-            # todo: report if src is none
             if source is not None:
                 ImageTuple = namedtuple("ImageTuple", ["src","alt","parentPage"])
                 aImageTuple = ImageTuple(self.makeFullUrl(self.url,source), image.get('alt'), self.url)
-                self.imagesFound.append(aImageTuple)
-        
-        return self.imagesFound
+                imagesFound.append(aImageTuple)
+
+        return imagesFound
 
     def findHeadLinks(self):
-        self.headLinksFound = []
+        headLinksFound = []
+
+        self.getPage()
 
         for link in self.soup.find_all('link'):
             source = link.get('href')
-            # todo: report if href is none
+
             if source is not None:
                 HeadLinkTuple = namedtuple("HeadLinkTuple", ["href","rel","type","title","parentPage"])
 
                 relVal = ""
                 typeVal = ""
                 titleVal = ""
-                if link.get("rel") != None:
+                if link.get("rel") is not None:
                     relVal = link.get("rel")
-                
-                if link.get("type") != None:
+
+                if link.get("type") is not None:
                     typeVal = link.get("type")
 
-                if link.get("title") != None:
+                if link.get("title") is not None:
                     titleVal = link.get("title")
 
                 aHeadLinkTuple = HeadLinkTuple(self.makeFullUrl(self.url,source), relVal, typeVal, titleVal, self.url)
-                self.headLinksFound.append(aHeadLinkTuple)
-        
-        return self.headLinksFound
+                headLinksFound.append(aHeadLinkTuple)
+
+        return headLinksFound
 
     def findScripts(self):
-        self.scriptsFound = []
+        scriptsFound = []
+
+        self.getPage()
 
         for script in self.soup.find_all('script'):
             source = script.get('src')
-            # todo: report if src is none
+
             if source is not None:
                 ScriptTuple = namedtuple("ScriptTuple", ["src","parentPage"])
                 aScriptTuple = ScriptTuple(self.makeFullUrl(self.url,source), self.url)
-                self.scriptsFound.append(aScriptTuple)
-        
-        return self.scriptsFound
+                scriptsFound.append(aScriptTuple)
+
+        return scriptsFound
 
     def findIFrames(self):
-        self.iFramesFound = []
+        iFramesFound = []
+
+        self.getPage()
 
         for iFrame in self.soup.find_all('iframe'):
             source = iFrame.get('src')
-            # todo: report if src is none
+
             if source is not None:
                 IFrameTuple = namedtuple("IFrameTuple", ["src","title","parentPage"])
 
                 titleVal = ""
-                if iFrame.get("title") != None:
+                if iFrame.get("title") is not None:
                     titleVal = iFrame.get("title")
 
                 aIFrameTuple = IFrameTuple(self.makeFullUrl(self.url,source), titleVal, self.url)
-                self.iFramesFound.append(aIFrameTuple)
-        
-        return self.iFramesFound
+                iFramesFound.append(aIFrameTuple)
+
+        return iFramesFound
 
     def getStatusCode(self):
         return self.statusCode

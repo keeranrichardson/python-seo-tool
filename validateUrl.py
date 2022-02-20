@@ -20,5 +20,5 @@ class ValidateUrl:
 
         goodUrl = goodUrl.replace(":////", "://")
         goodUrl = goodUrl.replace(":///", "://")
-            
+
         return goodUrl

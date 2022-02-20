@@ -15,7 +15,7 @@ class UrlResult:
 
     def getStatusCode(self):
         return self.statusCode
-        
+
     def setStatusCode(self, aStatusCode):
         self.statusCode = aStatusCode
 
@@ -32,7 +32,7 @@ class UrlResult:
         return self.redirectLocation
 
     def addParentUrl(self, url, text):
-        if text == None:
+        if text is None:
             text = ''
         ParentUrlText = namedtuple("ParentUrlText", ["text","url"])
         parentUrlText = ParentUrlText(text, url)
@@ -40,7 +40,7 @@ class UrlResult:
 
     def setUrlAsImage(self):
         self.isOfType = "image"
-    
+
     def setUrlAsHeadLink(self):
         self.isOfType = "headlink"
 
@@ -54,26 +54,22 @@ class UrlResult:
         self.isUrlInternal = internal
 
     def isInternal(self):
-        return self.isUrlInternal        
+        return self.isUrlInternal
 
     def isA(self):
         return self.isOfType
 
     def isImage(self):
-        return (self.isOfType == "image")
+        return self.isOfType == "image"
 
     def isLink(self):
-        return (self.isOfType == "link")
+        return self.isOfType == "link"
 
     def isHeadLink(self):
-        return (self.isOfType == "headlink")
+        return self.isOfType == "headlink"
 
     def isScript(self):
-        return (self.isOfType == "script")
+        return self.isOfType == "script"
 
     def isIFrame(self):
-        return (self.isOfType == "iframe")
-
-
-    
-
+        return self.isOfType == "iframe"

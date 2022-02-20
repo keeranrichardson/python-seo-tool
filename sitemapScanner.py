@@ -18,10 +18,10 @@ class SitemapScanner:
         for url in urlList:
             validator = ValidateUrl(url)
 
-            if validator.canUrlBeScanned() == False:
+            if validator.canUrlBeScanned() is False:
                 url = validator.tryAndMakeValidUrl()
 
-            validator = ValidateUrl(url)    
+            validator = ValidateUrl(url)
 
             if validator.canUrlBeScanned():
                 scanner.addUrlToScanAndFoundQueues(url)

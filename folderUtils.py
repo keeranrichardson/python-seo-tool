@@ -17,9 +17,9 @@ class FolderUtils:
             pass
         else:
             self.createPath(path)
-            
+
     def createPath(self, path):
         try:
             os.mkdir(path)
-        except OSError as error:
+        except OSError:
             pass
