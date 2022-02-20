@@ -19,6 +19,7 @@ class BrowserController:
                 try:
                     subprocess.call(['open', file])
                 except Exception as e:
+                    print("Exception when opening report")
                     print(e)
                     print('your HTML report is here: '+str(file))
                     

@@ -91,27 +91,12 @@ class Scanner:
 
             else:
                 if self.isAllowedToBeCrawled(webPageUrl):
-                    # links
-                    # do not add if already checked
 
                     self.addResultsToCrawl(webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
-
-                    # images
-
                     self.addResultsToCrawl(webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
-
-                    # headlinks
-
                     self.addResultsToCrawl(webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
-
-                    # scripts
-
                     self.addResultsToCrawl(webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
-
-                    # iframes
-
                     self.addResultsToCrawl(webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
-
 
         self.urlsStatusChecked[webPageUrl] = urlResult
 
@@ -175,7 +160,9 @@ class Scanner:
     def getUrlFromQueue(self, url):
         try:
             return self.urlsFound[self.sanitiseURL(url)]
-        except:
+        except Exception as e:
+            print("Exception when trying to find in URL queue " + url)
+            print(e)
             return None
 
     def getResults(self):

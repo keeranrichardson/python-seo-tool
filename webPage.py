@@ -27,7 +27,6 @@ class WebPage:
             print("can't find the links for "+ self.url+ " because status code = "+ str(self.statusCode))
             return False
 
-
         return True
 
     def getRedirectLocation(self):
@@ -43,7 +42,7 @@ class WebPage:
 
     def getPage(self):
         if self.html is None:
-            self.html = requests.get(self.url, allow_redirects=False).text
+            self.html = requests.get(self.url, allow_redirects=False, timeout=10).text
         if self.soup is None:
             self.soup = BeautifulSoup(self.html, "html.parser")
         return

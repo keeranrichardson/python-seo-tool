@@ -4,10 +4,6 @@ class FolderUtils:
     def __init__(self):
         ''
 
-    def createCWDFolder(self):
-        path = self.getCWDPath()
-        self.createPath(path)
-
     def getCWDPath(self, folderName):
         parentDir = os.getcwd() #gets current working directory
         return os.path.join(parentDir, folderName)
@@ -21,5 +17,6 @@ class FolderUtils:
     def createPath(self, path):
         try:
             os.mkdir(path)
-        except OSError:
-            pass
+        except OSError as e:
+            print("Exception when trying to Create Path" + str(path))
+            print(e)

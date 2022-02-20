@@ -162,4 +162,3 @@ class HTMLReporter:
             middle +="</ul>"
 
         return middle
-       

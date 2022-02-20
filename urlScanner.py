@@ -20,8 +20,9 @@ class UrlScanner:
                 self.location = self.response.headers['Location']
 
             return self.response.status_code
-        except:
-            print("error reading "+ self.url)
+        except Exception as e:
+            print("Exception when trying to HEAD request on " + self.url)
+            print(e)
             return "error"
 
     def getLocation(self):
