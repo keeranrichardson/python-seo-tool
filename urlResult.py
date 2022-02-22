@@ -12,7 +12,7 @@ class UrlResult:
     - script
 
     This class also tracks other important attributes like parent url or
-    if its a redirect urlwhich can be used in the HTML report
+    if its a redirect url which can be used in the HTML report
     
     Typical usage example:
     

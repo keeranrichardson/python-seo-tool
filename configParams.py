@@ -25,6 +25,8 @@ class ConfigParams:
     def getHTMLReportFileName(self):
         now = self.getCurrentDateString()
 
+        # if the filename has not been configured prompt the user to input one
+
         if self.vargs["filename"] is None:
             fileName = str(input("enter the name of html report file, default file name = "+now+" "))
         else:
@@ -36,6 +38,8 @@ class ConfigParams:
 
     def getUrlToParse(self):
 
+        # if the url has been configured, return it without any spaces at the start or end. Else return an empty string
+
         if self.vargs["url"] is not None:
             urlToReturn = self.vargs["url"]
         else:
@@ -44,12 +48,15 @@ class ConfigParams:
         return urlToReturn.strip()
 
     def getRateLimit(self):
+        # Return the ratelimit value
         return self.vargs["rateLimit"]
 
     def getOpenReport(self):
+        # return the boolean for whether the HTML report opens in default browser by default
         return bool(self.vargs["openReport"])
 
     def getDefaultConfigParams(self):
+        # calls function that reads command line parameters for config
         self.getConfigParamsFromCommandLineArguments()
 
         return
@@ -64,6 +71,8 @@ class ConfigParams:
 
 
     def getConfigParamsFromCommandLineArguments(self):
+        # reads command line parameters for config
+        # defines the command line parameters, defaults and what is displayed when -help is used
         parser = argparse.ArgumentParser(description='Scan site for URLs')
         parser.add_argument('-url', help='the url to scan')
         parser.add_argument('-filename', default=self.getCurrentDateString(), help='the filename of the html report output file')
@@ -82,7 +91,7 @@ class ConfigParams:
         print(args)
 
     def getCurrentDateString(self):
-
+        # returns current date and time in the format year-month-day-hour-minute-second
         return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
     def getAsHtmlFileName(self, fileNameStr):
