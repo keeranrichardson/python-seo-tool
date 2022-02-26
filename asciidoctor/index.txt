@@ -12,6 +12,13 @@ The images for the classes were created using pynsource.
 
 - https://www.pynsource.com/
 
+=== Overview Class diagram
+
+image::diagrams/classes.png[]
+
+This diagram shows the interaction between the classes in the application. 
+Main.py is not a class but it used objects from the other classes.
+
 === Application Source code
 
 The code which makes up the Scanner Tool.
@@ -51,11 +58,13 @@ to do all the scan work, and uses the tkIinter `self.window.after` event process
 to trigger each part of the scan, this allows the GUI to update and show progress of the
 scan.
 
+image::diagrams/tkinterGui_py.png[]
+
 ---
 
 [source,python]
 ----
-include::../configParams.py[]
+include::../tkinterGui.py[]
 ----
 
 === scanner.py
@@ -68,11 +77,18 @@ image::diagrams/scanner_py.png[]
 
 ---
 
+[source,python]
+----
+include::../scanner.py[]
+----
+
 === urlResult.py
 
 Each URL when scanned has the status stored in a `UrlResult` object. This is also used to
 track where the URL was found, if it is a redirection or the type of item it represents
 e.g. iFrame, Link, Image.
+
+image::diagrams/urlResult_py.png[]
 
 ---
 
@@ -88,6 +104,8 @@ include::../urlResult.py[]
 in one place and filter them so the report can later get all of specific types e.g. all the images,
 or get all the iFrames, or all links with a specific status code.
 
+image::diagrams/scannerResults_py.png[]
+
 ---
 
 [source,python]
@@ -102,6 +120,8 @@ i.e. 200 (found), 404 (missing), 500 (error). This uses an HTTP HEAD request.
 When we know that the URL is valid e.g. 200 status then we can use the `WebPage`
 class to GET the full HTML of the page.
 
+image::diagrams/urlScanner_py.png[]
+
 ---
 
 [source,python]
@@ -113,6 +133,8 @@ include::../urlScanner.py[]
 
 `WebPage` is an abstraction class to make it easy to process the HTML returned
 by an HTTP GET request. e.g. to find all the iFrames, Links or Images.
+
+image::diagrams/webPage_py.png[]
 
 ---
 
@@ -126,6 +148,8 @@ include::../webPage.py[]
 A Site Map is a standard formatted file to tell search engines the initial pages of a web site to scan.
 Some users will only want to scan a site based on the Site Map. This class uses AdvertTools to scan the
 sitemap and return a list of Urls to scan by the `Scanner` class.
+
+image::diagrams/sitemapScanner_py.png[]
 
 ---
 
@@ -141,6 +165,8 @@ created by the scan performed by `Scanner` and generates an HTML report
 showing all the Urls, their status and information to allow the user
 to spot issues with their web site..
 
+image::diagrams/htmlreporter_py.png[]
+
 ---
 
 [source,python]
@@ -151,6 +177,8 @@ include::../htmlreporter.py[]
 === reportGenerator.py
 
 `ReportGenerator` takes an `HtmlReporter` and writes the generated HTML to a file.
+
+image::diagrams/reportGenerator_py.png[]
 
 ---
 
@@ -166,6 +194,8 @@ This has to work cross platform as the application can work on Linux, Windows an
 The information for learning how to open files in different operating systems was
 found on StackOverflow.
 
+image::diagrams/browserController_py.png[]
+
 ---
 
 [source,python]
@@ -177,6 +207,8 @@ include::../browserController.py[]
 
 `folderUtils` is an abstraction to make it easy to create folders and get
 the current working directory of the application.
+
+image::diagrams/folderUtils_py.png[]
 
 ---
 

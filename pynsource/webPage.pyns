@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'WebPage', 'x':246, 'y':188, 'width':124, 'height':224, 'attrs': 'html|soup|statusCode|url|urlScanner', 'meths': '__init__|findHeadLinks|findIFrames|findImages|findLinks|findScripts|getPage|getRedirectLocation|getStatusCode|getURL|isUrlScannable|makeFullUrl'}

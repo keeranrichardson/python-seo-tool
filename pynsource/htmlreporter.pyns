@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'HTMLReporter', 'x':10, 'y':10, 'width':142, 'height':174, 'attrs': 'scannerResult|summaryCountLines|tableOfContentsList', 'meths': '__init__|aTag|addSummaryCountLine|addToTableOfContents|createHTMLSection|getSummaryCountSection|getTableOfContents|makeReport|makeStatusCodeSection'}

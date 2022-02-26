@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'ScannerResults', 'x':10, 'y':10, 'width':160, 'height':274, 'attrs': 'endDateTime|results|startDateTime|urlsScanned', 'meths': '__init__|addResult|addUrlScanned|getAllResultsOfStatusCode|getAllStatusCodes|getEndDateTimeRaw|getExternalLinkResults|getHeadLinkResults|getIFrameResults|getImageResults|getInternalLinkResults|getLinkResults|getResults|getResultsWhere|getScriptResults|getStartDateTime|getStartDateTimeRaw|getUrlsScanned'}

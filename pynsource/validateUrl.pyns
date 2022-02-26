@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'ValidateUrl', 'x':10, 'y':10, 'width':118, 'height':94, 'attrs': 'url', 'meths': '__init__|canUrlBeScanned|tryAndMakeValidUrl'}

@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'FolderUtils', 'x':10, 'y':10, 'width':148, 'height':84, 'attrs': '', 'meths': '__init__|createFolderIfNotExists|createPath|getCWDPath'}
