@@ -1,0 +1,9 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'Scanner', 'x':204, 'y':70, 'width':232, 'height':354, 'attrs': 'crawlUrls|restrictToDomain|results|startingUrl|treatUrlsWithEndingSlashSameAsWithout|urlsFound|urlsScanned|urlsStatusChecked|urlsToScan', 'meths': '__init__|addParentToPage|addParentToPageHeadLink|addParentToPageIFrame|addParentToPageImage|addParentToPageScript|addResultsToCrawl|addUrlToScanAndFoundQueues|getNextURLToScan|getResults|getUrlFromQueue|haveScannedAlready|isAllowedToBeCrawled|isInternal|isMoreToScan|sanitiseURL|scan|scanNext|scanPage|setCrawlUrls|shouldAddToScanQueue'}
+{'type':'umlshape', 'id':'ScannerResults', 'x':522, 'y':368, 'width':128, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'WebPage', 'x':531, 'y':180, 'width':69, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'UrlResult', 'x':546, 'y':254, 'width':86, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'edge', 'id':'ScannerResults_to_Scanner', 'source':'ScannerResults', 'target':'Scanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'WebPage_to_Scanner', 'source':'WebPage', 'target':'Scanner', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'UrlResult_to_Scanner', 'source':'UrlResult', 'target':'Scanner', 'uml_edge_type': 'association'}

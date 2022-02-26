@@ -1,0 +1,3 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'ConfigParams', 'x':10, 'y':10, 'width':244, 'height':194, 'attrs': 'args|vargs', 'meths': '__init__|getAsHtmlFileName|getConfigParamsFromCommandLineArguments|getCurrentDateString|getDefaultConfigParams|getHTMLReportFileName|getReportPath|getUrlToParse|isGui|setReportFileName|setReportPath|setUrl'}

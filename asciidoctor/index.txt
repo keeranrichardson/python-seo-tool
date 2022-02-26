@@ -1,0 +1,273 @@
+:source-highlighter: pygments
+
+== Final Source code
+
+This section lists all the source code for the final version of the application.
+
+This documentation was generated using Asciidoctor.
+
+- https://asciidoctor.org
+
+The images for the classes were created using pynsource.
+
+- https://www.pynsource.com/
+
+=== Application Source code
+
+The code which makes up the Scanner Tool.
+
+=== main.py
+
+
+The main file for the application which processes the command line,
+sets the defaults and displays the GUI or runs the command line version.
+
+---
+
+[source,python]
+----
+include::../main.py[]
+----
+
+=== configParams.py
+
+`configParams.py` reads the command line arguments and sets the config to sensible
+defaults if they do not exist. The config is used throughout the application
+as a set of global variables.
+
+image::diagrams/configParams_py.png[]
+
+---
+
+[source,python]
+----
+include::../configParams.py[]
+----
+
+=== tkInterGui.py
+
+`tkInterGui.py` is the tkInter GUI for the application. This uses the `scanner.py` class
+to do all the scan work, and uses the tkIinter `self.window.after` event processor
+to trigger each part of the scan, this allows the GUI to update and show progress of the
+scan.
+
+---
+
+[source,python]
+----
+include::../configParams.py[]
+----
+
+=== scanner.py
+
+The main class of the application used by the command line and the GUI to scan the website.
+It tracks the URLs processed by moving them between queues, which are implemented by arrays.
+The results are tracked in a `ScannerResults` object for creating a report when the scan ends.
+
+image::diagrams/scanner_py.png[]
+
+---
+
+=== urlResult.py
+
+Each URL when scanned has the status stored in a `UrlResult` object. This is also used to
+track where the URL was found, if it is a redirection or the type of item it represents
+e.g. iFrame, Link, Image.
+
+---
+
+[source,python]
+----
+include::../urlResult.py[]
+----
+
+
+=== scannerResults.py
+
+`ScannerResults` is a simple abstraction to make it easy to store all the `UrlResult` objects
+in one place and filter them so the report can later get all of specific types e.g. all the images,
+or get all the iFrames, or all links with a specific status code.
+
+---
+
+[source,python]
+----
+include::../scannerResults.py[]
+----
+
+=== urlScanner.py
+
+`UrlScanner` is an abstraction class to check the status of a URL
+i.e. 200 (found), 404 (missing), 500 (error). This uses an HTTP HEAD request.
+When we know that the URL is valid e.g. 200 status then we can use the `WebPage`
+class to GET the full HTML of the page.
+
+---
+
+[source,python]
+----
+include::../urlScanner.py[]
+----
+
+=== webPage.py
+
+`WebPage` is an abstraction class to make it easy to process the HTML returned
+by an HTTP GET request. e.g. to find all the iFrames, Links or Images.
+
+---
+
+[source,python]
+----
+include::../webPage.py[]
+----
+
+=== sitemapScanner.py
+
+A Site Map is a standard formatted file to tell search engines the initial pages of a web site to scan.
+Some users will only want to scan a site based on the Site Map. This class uses AdvertTools to scan the
+sitemap and return a list of Urls to scan by the `Scanner` class.
+
+---
+
+[source,python]
+----
+include::../sitemapScanner.py[]
+----
+
+=== htmlreporter.py
+
+`HtmlReporter` takes a `ScannerResults` object with all the `UrlResults`
+created by the scan performed by `Scanner` and generates an HTML report
+showing all the Urls, their status and information to allow the user
+to spot issues with their web site..
+
+---
+
+[source,python]
+----
+include::../htmlreporter.py[]
+----
+
+=== reportGenerator.py
+
+`ReportGenerator` takes an `HtmlReporter` and writes the generated HTML to a file.
+
+---
+
+[source,python]
+----
+include::../reportGenerator.py[]
+----
+
+=== browserController.py
+
+`BrowserController` is an abstraction to open a file in the user's default browser.
+This has to work cross platform as the application can work on Linux, Windows and Mac.
+The information for learning how to open files in different operating systems was
+found on StackOverflow.
+
+---
+
+[source,python]
+----
+include::../browserController.py[]
+----
+
+=== folderUtils.py
+
+`folderUtils` is an abstraction to make it easy to create folders and get
+the current working directory of the application.
+
+---
+
+[source,python]
+----
+include::../folderUtils.py[]
+----
+
+
+=== Test Code
+
+The Unit Testing code written with pyTest. This helped when making changes
+to the application to spot if any simple errors had been made without having
+to run the application and scan a web site.
+
+Tests can be run by typing `pytest` at the command line.
+
+Not all classes and methods were suitable for testing.
+tkInter would need a different tool to automate the GUI, and methods which write
+files to disk or make HTTP calls are not suitable for Unit Testing.
+
+=== test_configParams.py
+
+Tests for the `ConfigParams` class.
+
+---
+
+[source,python]
+----
+include::../tests/test_configParams.py[]
+----
+
+=== test_htmlreporter.py
+
+Tests for the `HtmlReporter` class.
+
+---
+
+[source,python]
+----
+include::../tests/test_htmlreporter.py[]
+----
+
+=== test_scanner.py
+
+Tests for the `Scanner` class, only some methods are suitable for Unit Testing
+because the Scanner makes HTTP calls to scan a site. It might be possible to
+write tests to do this in the future if a test site was created for the scanner to scan.
+
+---
+
+[source,python]
+----
+include::../tests/test_scanner.py[]
+----
+
+=== test_url.py
+
+Tests for the `UrlScanner` class. This test does make HTTP calls so it might
+fail if the tests were run when the computer does not have an internet connection
+or if the web site was changed. These tests would be better if a test site was
+available for the app which could run locally on the same machine the tests are run.
+
+
+---
+
+[source,python]
+----
+include::../tests/test_scanner.py[]
+----
+
+=== test_validateUrl.py
+
+Tests the String parsing used to validate urls.
+
+---
+
+[source,python]
+----
+include::../tests/test_validateUrl.py[]
+----
+
+=== test_webPage.py
+
+Tests the basic features of the `WebPage` class,
+this is not a complete set of tests and because it makes HTTP requests
+it should be using a test site run locally.
+
+---
+
+[source,python]
+----
+include::../tests/test_webPage.py[]
+----
