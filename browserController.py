@@ -2,8 +2,10 @@ import subprocess
 import os
 import webbrowser
 
-# https://stackoverflow.com/questions/40905703/how-to-open-an-html-file-in-the-browser-from-python
-# https://stackoverflow.com/questions/29823028/attributeerror-module-object-has-no-attribute-startfile
+# https://stackoverflow.com/questions
+# /40905703/how-to-open-an-html-file-in-the-browser-from-python
+# https://stackoverflow.com/questions
+# /29823028/attributeerror-module-object-has-no-attribute-startfile
 
 
 class BrowserController:
@@ -25,7 +27,8 @@ class BrowserController:
             webbrowser.open(file)
         except AttributeError:
             try:
-                os.startfile(file)  # opens file in default viewer for filetype
+                # opens file in default viewer for filetype
+                os.startfile(file)
             except:
                 try:
                     subprocess.call(["open", file])

@@ -22,6 +22,12 @@ class UrlScanner:
         self.location = ""
 
     def getStatus(self):
+        """
+        Make an HTTP HEAD request on the url to get
+        the status code and any important headers.
+        Currently only use the Location header for
+        redirect status codes
+        """
         try:
             if self.response is None:
                 self.response = requests.head(

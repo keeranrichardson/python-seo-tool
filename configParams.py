@@ -37,6 +37,9 @@ class ConfigParams:
                     + " "
                 )
             )
+
+        # set fileName to what the user configured
+
         else:
             fileName = self.vargs["filename"]
 
@@ -45,9 +48,10 @@ class ConfigParams:
         return fileName
 
     def getUrlToParse(self):
-
-        # if the url has been configured, return it without
-        # any spaces at the start or end. Else return an empty string
+        """
+        if the url has been configured, return it without
+        any spaces at the start or end. Else return an empty string
+        """
 
         if self.vargs["url"] is not None:
             urlToReturn = self.vargs["url"]
@@ -57,31 +61,45 @@ class ConfigParams:
         return urlToReturn.strip()
 
     def getRateLimit(self):
-        # Return the ratelimit value
+        """
+        Return the ratelimit value
+        """
         return self.vargs["rateLimit"]
 
     def getOpenReport(self):
-        # return the boolean for whether the HTML report opens in default browser by default
+        """
+        return the boolean for whether the HTML report
+        opens in default browser by default
+        """
         return bool(self.vargs["openReport"])
 
     def getDefaultConfigParams(self):
-        # calls function that reads command line parameters for config
+        """
+        calls function that reads command
+        line parameters for config
+        """
         self.getConfigParamsFromCommandLineArguments()
 
         return
 
     def ensureBooleanValue(self, aValue):
-
-        # if it is a boolean return it
+        """
+        if it is a boolean return it.
+        It might not be a boolean because argparse
+        returns boolean command line arguments as strings
+        """
         if isinstance(aValue, (int)):
             return aValue
 
         return aValue.lower() == "true"
 
     def getConfigParamsFromCommandLineArguments(self):
-        # reads command line parameters for config
-        # defines the command line parameters, defaults
-        # and what is displayed when -help is used
+        """
+        reads command line parameters for config
+        defines the command line parameters, defaults
+        and what is displayed when -help is used
+        """
+
         parser = argparse.ArgumentParser(description="Scan site for URLs")
         parser.add_argument("-url", help="the url to scan")
         parser.add_argument(
@@ -112,10 +130,17 @@ class ConfigParams:
         print(args)
 
     def getCurrentDateString(self):
-        # returns current date and time in the format year-month-day-hour-minute-second
+        """
+        returns current date and time in the format
+        year-month-day-hour-minute-second
+        """
         return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
     def getAsHtmlFileName(self, fileNameStr):
+        """
+        convert a given string fileNameStr into a valid filename
+        by removing various invalid characters.
+        """
 
         # if user inputted filename with .html already
         # at the end, do not add .html to the end
@@ -124,7 +149,8 @@ class ConfigParams:
             suffix = ""
 
         # https://docs.python.org/3/library/re.html
-        # https://stackoverflow.com/questions/5843518/remove-all-special-characters-punctuation-and-spaces-from-string
+        # https://stackoverflow.com/questions
+        # /5843518/remove-all-special-characters-punctuation-and-spaces-from-string
         # use a regular expression to filter out any invalid filename characters
 
         fileName = re.sub("[^A-Za-z0-9_\\-\\.]+", "", fileNameStr) + suffix
@@ -137,6 +163,11 @@ class ConfigParams:
         return fileName
 
     def isGui(self):
+        """
+        the cmd parameter is used to configure the command line,
+        if it is false then we will use the GUI
+        """
+
         # Return the opposite of the -cmd parameter
         return not self.vargs["cmd"]
 

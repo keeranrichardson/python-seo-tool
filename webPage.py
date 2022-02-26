@@ -29,13 +29,17 @@ class WebPage:
         self.soup = None
 
     def isUrlScannable(self):
+        """
+        If status code is in the list then it is scannable
+        e.g. 200, 301, 302, etc.
+        """
 
         validStatusCodes = [
-            200,  # OK
+            200,  # OK - Found resource
             301,  # Permanent redirect
             302,  # Temporary redirect
-            307,
-            308,
+            307,  # Temporary Redirect
+            308,  # Permanent redirect
         ]
 
         if self.statusCode not in validStatusCodes:
@@ -50,6 +54,11 @@ class WebPage:
         return True
 
     def getRedirectLocation(self):
+        """
+        Return a string for the redirect location and
+        if it is a relative URL then make it a full URL
+        to allow the scanner to follow the link
+        """
         redirectLocation = self.urlScanner.getLocation()
         parsedUrl = urlparse(redirectLocation)
         if parsedUrl.scheme == "":
@@ -61,6 +70,11 @@ class WebPage:
         return urljoin(base, end)
 
     def getPage(self):
+        """
+        Make sure the page has been retrieved from the URL
+        If the HTML has not been retrieved then make a GET request on the URL.
+        If the HTMl has not be processed by BeautifulSoup then process it now.
+        """
         if self.html is None:
             self.html = requests.get(self.url, allow_redirects=False, timeout=10).text
         if self.soup is None:
@@ -68,6 +82,12 @@ class WebPage:
         return
 
     def findLinks(self):
+        """
+        Return an array of LinkTuple items
+        which represent the links in the HTML
+        LinkTuple contains the url, the text of the link
+        on the page and the parentPage url where it was found
+        """
         urlsFound = []
 
         try:
@@ -93,6 +113,11 @@ class WebPage:
         return urlsFound
 
     def findImages(self):
+        """
+        Return an array of ImageTuple items
+        which represent the images in the HTML
+        ImageTuple contains the src, alt and parentPage url
+        """
         imagesFound = []
 
         try:
@@ -113,6 +138,13 @@ class WebPage:
         return imagesFound
 
     def findHeadLinks(self):
+        """
+        Return an array of HeadLinkTuple items
+        which represent the link items in the head section of the HTML.
+        The HeadLinkTuple contains the url,
+        and other attributes like rel, type and title,
+        also the parentPage url
+        """
         headLinksFound = []
 
         try:
@@ -153,6 +185,12 @@ class WebPage:
         return headLinksFound
 
     def findScripts(self):
+        """
+        Return an array of ScriptTuple items
+        which represent the script references found in the HTML.
+        The ScriptTuple contains the url of the script
+        and the parentPage it was found referenced in.
+        """
         scriptsFound = []
 
         try:
@@ -174,6 +212,13 @@ class WebPage:
         return scriptsFound
 
     def findIFrames(self):
+        """
+        Return an array of IFrameTuple items
+        which represent the iframes in the HTML.
+        IFrameTuple contains the src url of the
+        page included by the iframe, the title
+        and the parentPage it was found in.
+        """
         iFramesFound = []
 
         try:

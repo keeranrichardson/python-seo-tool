@@ -23,6 +23,10 @@ class ValidateUrl:
         self.url = url
 
     def canUrlBeScanned(self):
+        """
+        Allow scanning when the scheme is present e.g. https://
+        And the netloc is present (the domain) e.g. keeranrichardson.com
+        """
         parseUrl = urlparse(self.url)
         if parseUrl.netloc != "" and parseUrl.scheme != "":
             return True
@@ -30,6 +34,10 @@ class ValidateUrl:
             return False
 
     def tryAndMakeValidUrl(self):
+        """
+        If there is no scheme then add https://
+        and handle relative Urls by replacing /// characters
+        """
         goodUrl = self.url
         parsedUrl = urlparse(goodUrl)
         if parsedUrl.scheme == "":

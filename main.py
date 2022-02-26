@@ -39,25 +39,36 @@ python main.py
 
 """
 
+# stores the configuration parameters
+# from the commmand line
 configParams = ConfigParams()
 configParams.getDefaultConfigParams()
 urlToParse = configParams.getUrlToParse()
 
+# if the user has configured the tool to
+# run through the GUI then start tkinter
 if configParams.isGui() is True:
     gui = TkinterGui(configParams)
     gui.showGui()
 else:
-    if urlToParse == '':
-        urlToParse= str(input("enter the url to scan: "))
+    # if the user did not enter a URL at first then
+    # prompt the user to enter a url now
+    if urlToParse == "":
+        urlToParse = str(input("enter the url to scan: "))
 
-    if urlToParse == '':
+    # if the user still did not enter a URL, then close the application
+    if urlToParse == "":
         print("error: This tool needs a url to scan, you did not enter a url")
         exit()
 
+    # check if the url is valid, if not,
+    # try and make it valid
     urlValidator = ValidateUrl(urlToParse)
     if not urlValidator.canUrlBeScanned():
         urlToParse = urlValidator.tryAndMakeValidUrl()
 
+    # if the url is still not valid then exit
+    # the application and print an error message
     urlValidator = ValidateUrl(urlToParse)
     if not urlValidator.canUrlBeScanned():
         print("error: url is not valid " + urlToParse)
@@ -65,25 +76,29 @@ else:
 
     configParams.setUrl(urlToParse)
 
+    # create a scanner object with the url and the network location
     parseUrl = urlparse(urlToParse)
     scanner = Scanner(urlToParse, parseUrl.netloc)
 
     scanner.setRateLimitMilliseconds(configParams.getRateLimit())
 
-    # if sitemap, do not crawl urls found
+    # if the url is a sitemap set the tool to
+    # only scan the urls, not crawl them
     sitemapScanner = SitemapScanner(urlToParse)
     if sitemapScanner.isSitemap():
         sitemapScanner.addSitemapUrlsToScan(scanner)
         scanner.setCanCrawlUrls(False)
 
+    # start the scan
     scanner.scan()
 
+    # generate the HTML report
     report = ReportGenerator(configParams, scanner)
     report.generateReport()
 
     print("Report written to " + report.getPathAndFileName())
 
+    # if th euser has configures the scan to automatically open report,
+    # then open the html report in their default browser
     if configParams.getOpenReport():
         BrowserController().open(report.getPathAndFileName())
-
-    #todos

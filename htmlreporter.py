@@ -19,16 +19,20 @@ class HTMLReporter:
         self.tableOfContentsList = []
 
     def aTag(self, url, text):
-        # Creates an html string for an <a> tag when given the url and text
+        """
+        Creates an html string for an <a> tag when given the url and text
+        """
 
         tag = "<a href = '" + url + "' target='_blank'>" + text + "</a>"
 
         return tag
 
     def makeReport(self):
+        """
+        Generate the HTML report and return it as a String
+        """
 
         # top and bottom are parts of the HTML report that will be the same between every report
-
         top = """
                 <html>
                     <head>
@@ -63,6 +67,7 @@ class HTMLReporter:
         duration = "{:02} hours, {:02} minutes, {:02} seconds".format(
             hours, minutes, seconds
         )
+
         # Line of report that will show the duration of the scan
         timeDifferenceLine = "<p>Duration of scan: {}</p>".format(duration)
 
@@ -151,25 +156,40 @@ class HTMLReporter:
         return html
 
     def makeStatusCodeSection(self):
+        """
+        Create the section listing all the found status codes and counts
+        """
+        # gets all status codes from scanner result
         statusCodes = self.scannerResult.getAllStatusCodes()
+        # for each status code calculate how many links had that status code
         for statusCode in statusCodes:
             amount = len(self.scannerResult.getAllResultsOfStatusCode(statusCode))
             self.addSummaryCountLine(str(statusCode) + "s", amount)
 
     def getSummaryCountSection(self):
+        """
+        Return an HTML string with all the summary counts in a section
+        """
+        # joins thr lines for the summary together
         summaryCountSection = (
             "<h2>Summary</h2><ul>" + "\n".join(self.summaryCountLines) + "</ul>"
         )
         return summaryCountSection
 
     def addSummaryCountLine(self, title, number):
+        """
+        adds a line to summaryCountLines
+        """
         lineTemplate = "<li>{} = {}</li>"
         line = lineTemplate.format(title, number)
 
         self.summaryCountLines.append(line)
 
     def getTableOfContents(self):
-
+        """
+        creates the html string for the table of
+        contents from the tableOfContentsList variable
+        """
         tableOfContents = (
             "<h2>Table of Contents</h2><ul>"
             + "\n".join(self.tableOfContentsList)
@@ -178,29 +198,44 @@ class HTMLReporter:
         return tableOfContents
 
     def addToTableOfContents(self, hashValue, displayText):
-
+        """
+        Creates a line that will be used in the
+        clickable table of contents
+        """
         lineTemplate = "<li><a href='#{}'>{}</a></li>"
         line = lineTemplate.format(hashValue, displayText)
 
         self.tableOfContentsList.append(line)
 
     def createHTMLSection(self, title, results):
+        """
+        When given an array of URL results,
+        create an HTML string for the section with a given title.
+        """
 
+        # adds table of contents for this section
         self.addToTableOfContents(title, title)
 
         middle = "<h2 id='" + title + "'>" + title + "</h2>"
 
         middle += "<ul>"
 
+        # the template for the status of the URL in the report
         lineTemplate = "<li>{} {} {} {}</li>"
 
+        # a dictionary that is used to create subsections in the report about each
+        # status code by making each section a key in the dictionary and the
+        # report lines the value
         statusCodeLinks = {}
 
         for result in results:
+            # gets the status code for the url result and initialise the section
             statusCode = result.getStatusCode()
             if str(statusCode) not in statusCodeLinks:
                 statusCodeLinks[str(statusCode)] = ""
 
+            # create a url to link to the mozilla documentation
+            # definition of the status code
             statusCodeLink = self.aTag(
                 "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{}".format(
                     result.getStatusCode()
@@ -209,6 +244,8 @@ class HTMLReporter:
             )
             resultUrlLink = self.aTag(result.getURL(), result.getURL())
 
+            # create the html to render the list of parent
+            # urls or pages where the url was found
             parentUrls = ""
             if len(result.getParentUrls()) > 0:
                 parentUrls = "<ul><li>found on:<ul>"
@@ -226,6 +263,8 @@ class HTMLReporter:
                     newLine = "\n"
                 parentUrls += "</ul></li></ul>"
 
+            # if the url redirects, create the HTML
+            # to render the redirect location
             if result.getRedirectLocation() is not None:
                 redirectsTo = (
                     "<ul><li>redirects to:<ul>"
@@ -238,6 +277,7 @@ class HTMLReporter:
             else:
                 redirectsTo = ""
 
+            # use the original template to format the HTML sections we just created
             lineInMiddle = lineTemplate.format(
                 statusCodeLink, resultUrlLink, parentUrls, redirectsTo
             )
@@ -246,8 +286,9 @@ class HTMLReporter:
                 statusCodeLinks[str(statusCode)] + lineInMiddle + "\n"
             )
 
+        # create section in HTML report with a heading
+        # for each key and value in the dictionary
         middle += "</ul>"
-
         for statusCode, link in statusCodeLinks.items():
             middle += "\n<h3>" + statusCode + "s:</h3>\n"
             middle += "<ul>"

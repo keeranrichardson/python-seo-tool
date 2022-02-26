@@ -16,18 +16,25 @@ class FolderUtils:
         """"""
 
     def getCWDPath(self, folderName):
-        parentDir = os.getcwd()  # gets current working directory
+        """
+        gets current working directory
+        """
+        parentDir = os.getcwd()
         return os.path.join(parentDir, folderName)
 
     def createFolderIfNotExists(self, path):
-        # creates a path if it doesn't exist
+        """
+        creates a path if it doesn't exist
+        """
         if os.path.exists(path) and os.path.isdir(path):
             pass
         else:
             self.createPath(path)
 
     def createPath(self, path):
-        # tries to make a path
+        """
+        tries to make a path
+        """
         try:
             os.mkdir(path)
         except OSError as e:

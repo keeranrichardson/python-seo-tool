@@ -24,13 +24,24 @@ class SitemapScanner:
         self.url = url
 
     def isSitemap(self):
+        """
+        checks if the url is a sitemap
+        """
         if self.url.endswith(".xml") or self.url.endswith(".xml.gz"):
             return True
         return False
 
     def addSitemapUrlsToScan(self, scanner):
+        """
+        adds the urls from the sitemap to the scan queue
+        """
+        # use advertools to get and process the sitemap file
         sitemap = adv.sitemap_to_df(self.url)
+        # get the location values from the sitemap
         urlList = sitemap["loc"].tolist()
+
+        # for each url, validate it and add valid URLs
+        # to the scanner for processing
         for url in urlList:
             validator = ValidateUrl(url)
 

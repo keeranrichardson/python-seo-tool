@@ -26,9 +26,17 @@ class UrlResult:
     """
 
     def __init__(self, url, statusCode):
+
+        # initialise with a url string
+        # and statusCode integer
         self.url = url
         self.statusCode = statusCode
+
+        # parentUrls is an array of
+        # ParentUrlText named tuples
         self.parentUrls = []
+
+        # default to no redirect, and internal Link
         self.redirectLocation = None
         self.isOfType = "link"
         self.isUrlInternal = True
@@ -43,6 +51,11 @@ class UrlResult:
         self.statusCode = aStatusCode
 
     def getParentUrl(self):
+        """
+        Parent URLs are stored in an array.
+        If no parent then return None otherwise
+        return the first ParentUrlText tuple in the array
+        """
         if len(self.parentUrls) == 0:
             return None
         return self.parentUrls[0]
@@ -57,6 +70,11 @@ class UrlResult:
         return self.redirectLocation
 
     def addParentUrl(self, url, text):
+        """
+        When given a String url and the text of the link on the page
+        create a namedtuple of ParentUrlText to store the values
+        and add to the array of parentUrls
+        """
         if text is None:
             text = ""
         ParentUrlText = namedtuple("ParentUrlText", ["text", "url"])
