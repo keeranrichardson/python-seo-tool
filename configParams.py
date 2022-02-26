@@ -2,6 +2,7 @@ import datetime
 import re
 import argparse
 
+
 class ConfigParams:
     """Module to store all configuration parameters
 
@@ -12,13 +13,14 @@ class ConfigParams:
     or
 
     python main.py -url https://keeranrichardson.com -cmd=True
-    
+
     Typical usage example:
-    
+
     configParams = ConfigParams()
     configParams.getDefaultConfigParams()
     urlToParse = configParams.getUrlToParse()
     """
+
     def __init__(self):
         self.vargs = {}
 
@@ -28,7 +30,13 @@ class ConfigParams:
         # if the filename has not been configured prompt the user to input one
 
         if self.vargs["filename"] is None:
-            fileName = str(input("enter the name of html report file, default file name = "+now+" "))
+            fileName = str(
+                input(
+                    "enter the name of html report file, default file name = "
+                    + now
+                    + " "
+                )
+            )
         else:
             fileName = self.vargs["filename"]
 
@@ -38,12 +46,13 @@ class ConfigParams:
 
     def getUrlToParse(self):
 
-        # if the url has been configured, return it without any spaces at the start or end. Else return an empty string
+        # if the url has been configured, return it without
+        # any spaces at the start or end. Else return an empty string
 
         if self.vargs["url"] is not None:
             urlToReturn = self.vargs["url"]
         else:
-            urlToReturn = ''
+            urlToReturn = ""
 
         return urlToReturn.strip()
 
@@ -64,22 +73,34 @@ class ConfigParams:
     def ensureBooleanValue(self, aValue):
 
         # if it is a boolean return it
-        if isinstance(aValue,(int)):
+        if isinstance(aValue, (int)):
             return aValue
 
-        return aValue.lower()=="true"
-
+        return aValue.lower() == "true"
 
     def getConfigParamsFromCommandLineArguments(self):
         # reads command line parameters for config
-        # defines the command line parameters, defaults and what is displayed when -help is used
-        parser = argparse.ArgumentParser(description='Scan site for URLs')
-        parser.add_argument('-url', help='the url to scan')
-        parser.add_argument('-filename', default=self.getCurrentDateString(), help='the filename of the html report output file')
-        parser.add_argument('-cmd', default=False, help='run the program from the command line')
-        parser.add_argument('-reportPath', default='', help='path where HTML report will be stored')
-        parser.add_argument('-rateLimit', default=0, help='milliseconds to wait between scans')
-        parser.add_argument('-openReport', default=True, help='automatically opens report when finished')
+        # defines the command line parameters, defaults
+        # and what is displayed when -help is used
+        parser = argparse.ArgumentParser(description="Scan site for URLs")
+        parser.add_argument("-url", help="the url to scan")
+        parser.add_argument(
+            "-filename",
+            default=self.getCurrentDateString(),
+            help="the filename of the html report output file",
+        )
+        parser.add_argument(
+            "-cmd", default=False, help="run the program from the command line"
+        )
+        parser.add_argument(
+            "-reportPath", default="", help="path where HTML report will be stored"
+        )
+        parser.add_argument(
+            "-rateLimit", default=0, help="milliseconds to wait between scans"
+        )
+        parser.add_argument(
+            "-openReport", default=True, help="automatically opens report when finished"
+        )
 
         args = parser.parse_args()
         self.vargs = vars(args)
@@ -96,38 +117,45 @@ class ConfigParams:
 
     def getAsHtmlFileName(self, fileNameStr):
 
-        # if user inputted filename with .html already at the end, do not add .html to the end
+        # if user inputted filename with .html already
+        # at the end, do not add .html to the end
         suffix = ".html"
         if fileNameStr.endswith(suffix):
-            suffix = ''
+            suffix = ""
 
         # https://docs.python.org/3/library/re.html
         # https://stackoverflow.com/questions/5843518/remove-all-special-characters-punctuation-and-spaces-from-string
         # use a regular expression to filter out any invalid filename characters
 
-        fileName = re.sub('[^A-Za-z0-9_\\-\\.]+', '', fileNameStr)+suffix
+        fileName = re.sub("[^A-Za-z0-9_\\-\\.]+", "", fileNameStr) + suffix
 
-        # if trimmed filename is empty, then make the filename the default as the current date and time
-        if fileName == '.html':
-            fileName = self.getCurrentDateString()+'.html'
+        # if trimmed filename is empty, then make the filename
+        # the default as the current date and time
+        if fileName == ".html":
+            fileName = self.getCurrentDateString() + ".html"
 
         return fileName
 
     def isGui(self):
-
+        # Return the opposite of the -cmd parameter
         return not self.vargs["cmd"]
 
     def setUrl(self, urlToParse):
+        # Sets the -url parameter
         self.vargs["url"] = urlToParse
 
     def getReportPath(self):
+        # Returns the -reportPath config
         return self.vargs["reportPath"]
 
     def setReportPath(self, newPath):
+        # Sets the -reportPath config
         self.vargs["reportPath"] = newPath
 
     def setReportFileName(self, newFileName):
+        # Sets the -filename config
         self.vargs["filename"] = newFileName
 
     def setRateLimit(self, rateLimit):
+        # Sets the -rateLimit config
         self.vargs["rateLimit"] = rateLimit

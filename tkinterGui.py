@@ -11,18 +11,19 @@ from validateUrl import ValidateUrl
 
 class TkinterGui:
     """The tkinter GUI for the application
-    
+
     This class creates the tkinter GUI for the tool and handles the scan
     through the tool.
-    
+
     Typical usage example:
-    
+
     gui = TkinterGui(configParams)
     gui.showGui()
 
     Attributes:
         configParams: A ConfigParams object
     """
+
     def __init__(self, configParams):
         self.configParams = configParams
         self.scanIsActive = False
@@ -41,68 +42,82 @@ class TkinterGui:
 
     def showGui(self):
         self.window = tk.Tk()
-        self.window.title('link checker')
-        #self.window.geometry("300x200+10+10")
+        self.window.title("link checker")
+        # self.window.geometry("300x200+10+10")
 
         tk.Label(text="Enter domain or sitemap URL:").pack()
 
         entryFrame = tk.Frame(self.window)
 
-        self.txtfld=tk.Entry(entryFrame)
+        self.txtfld = tk.Entry(entryFrame)
         self.txtfld.insert(0, self.configParams.getUrlToParse())
-        self.txtfld.pack(fill = 'x')
+        self.txtfld.pack(fill="x")
 
-        entryFrame.pack(padx = 20, fill = 'x')
+        entryFrame.pack(padx=20, fill="x")
 
         tk.Label(text="Select rate limiting value (milliseconds):").pack()
 
         self.rateLimitValue = tk.IntVar()
         self.rateLimitValue.set(self.configParams.getRateLimit())
-        rateLimitMenu = tk.OptionMenu(self.window, self.rateLimitValue, 2000, 1000, 500, 0)
+        rateLimitMenu = tk.OptionMenu(
+            self.window, self.rateLimitValue, 2000, 1000, 500, 0
+        )
         rateLimitMenu.pack()
 
         enterFileNameFrame = tk.Frame(self.window)
 
         tk.Label(enterFileNameFrame, text="Enter file name of HTML report:").pack()
 
-        self.enterPath=tk.Entry(enterFileNameFrame)
+        self.enterPath = tk.Entry(enterFileNameFrame)
         self.enterPath.insert(0, self.configParams.getHTMLReportFileName())
-        self.enterPath.pack(fill = 'x')
+        self.enterPath.pack(fill="x")
 
-        enterFileNameFrame.pack(padx = 20, fill = 'x')
+        enterFileNameFrame.pack(padx=20, fill="x")
 
-        choosePathButton = tk.Button(self.window, text = "select path for HTML report", command = self.choosePath)
+        choosePathButton = tk.Button(
+            self.window, text="select path for HTML report", command=self.choosePath
+        )
         choosePathButton.pack()
 
-        self.pathLabel = tk.Label(text="Path for HTML report = "+self.getCurrentHTMLReportPath())
+        self.pathLabel = tk.Label(
+            text="Path for HTML report = " + self.getCurrentHTMLReportPath()
+        )
         self.pathLabel.pack()
 
         buttonFrame = tk.Frame(self.window)
 
-        self.startScanBtn=tk.Button(buttonFrame, text="Start Scan", command = self.startScan)
-        self.startScanBtn.pack(side = tk.LEFT)
+        self.startScanBtn = tk.Button(
+            buttonFrame, text="Start Scan", command=self.startScan
+        )
+        self.startScanBtn.pack(side=tk.LEFT)
 
-        self.pauseScanBtn=tk.Button(buttonFrame, text="Pause Scan", command = self.pauseScan)
-        self.pauseScanBtn.pack(side = tk.LEFT)
+        self.pauseScanBtn = tk.Button(
+            buttonFrame, text="Pause Scan", command=self.pauseScan
+        )
+        self.pauseScanBtn.pack(side=tk.LEFT)
         self.pauseScanBtn["state"] = "disabled"
 
-        self.continueScanBtn=tk.Button(buttonFrame, text="Continue Scan", command = self.unpauseScan)
-        self.continueScanBtn.pack(side = tk.LEFT)
+        self.continueScanBtn = tk.Button(
+            buttonFrame, text="Continue Scan", command=self.unpauseScan
+        )
+        self.continueScanBtn.pack(side=tk.LEFT)
         self.continueScanBtn["state"] = "disabled"
 
         buttonFrame.pack()
 
         scrolledTextFrame = tk.Frame(self.window)
 
-        self.reportBtn=tk.Button(self.window, text="open report", command = self.openReport)
+        self.reportBtn = tk.Button(
+            self.window, text="open report", command=self.openReport
+        )
         self.reportBtn.pack()
         self.reportBtn["state"] = "disabled"
 
-        self.showLogs=scrolledtext.ScrolledText(scrolledTextFrame)
-        #self.showLogs.see(tk.END)
-        self.showLogs.pack(fill = 'both', expand = True)
+        self.showLogs = scrolledtext.ScrolledText(scrolledTextFrame)
+        # self.showLogs.see(tk.END)
+        self.showLogs.pack(fill="both", expand=True)
 
-        scrolledTextFrame.pack(padx = 20, pady = 20, fill = 'both', expand = True)
+        scrolledTextFrame.pack(padx=20, pady=20, fill="both", expand=True)
 
         self.window.mainloop()
 
@@ -124,7 +139,7 @@ class TkinterGui:
             sitemapScanner.addSitemapUrlsToScan(self.scanner)
             self.scanner.setCanCrawlUrls(False)
 
-        self.startScanBtn.config(text = "Restart Scan")
+        self.startScanBtn.config(text="Restart Scan")
 
         self.startScanBtn["state"] = "normal"
         self.reportBtn["state"] = "disabled"
@@ -170,7 +185,7 @@ class TkinterGui:
 
     def addToTextBox(self, text):
         self.showLogs.see(tk.END)
-        self.showLogs.insert(tk.END, text+"\n")
+        self.showLogs.insert(tk.END, text + "\n")
         self.showLogs.see(tk.END)
 
     def pauseScan(self):
@@ -205,7 +220,7 @@ class TkinterGui:
         return self.txtfld.get()
 
     def showErrorMessage(self, errorMessage):
-        tk.messagebox.showerror(title = "error", message = errorMessage)
+        tk.messagebox.showerror(title="error", message=errorMessage)
 
     def choosePath(self):
         reportPath = filedialog.askdirectory()
@@ -213,11 +228,9 @@ class TkinterGui:
             return
 
         self.configParams.setReportPath(reportPath)
-        self.pathLabel.config(text = "Path for HTML report = "+self.getCurrentHTMLReportPath())
+        self.pathLabel.config(
+            text="Path for HTML report = " + self.getCurrentHTMLReportPath()
+        )
 
     def getCurrentHTMLReportPath(self):
         return ReportGenerator(self.configParams, None).getPath()
-
-
-
-#TkinterGui().showGui()

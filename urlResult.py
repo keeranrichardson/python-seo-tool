@@ -1,8 +1,9 @@
 from collections import namedtuple
 
+
 class UrlResult:
     """Tracks status code and attributes for a scanned url
-    
+
     Helps distinguish different types of links.
 
     eg:
@@ -13,9 +14,9 @@ class UrlResult:
 
     This class also tracks other important attributes like parent url or
     if its a redirect url which can be used in the HTML report
-    
+
     Typical usage example:
-    
+
     result = UrlResult(link, 0)
     result.setUrlAsImage()
 
@@ -23,6 +24,7 @@ class UrlResult:
         url: The url that has been scanned
         statusCode: The status code of the url that has been scanned
     """
+
     def __init__(self, url, statusCode):
         self.url = url
         self.statusCode = statusCode
@@ -30,7 +32,6 @@ class UrlResult:
         self.redirectLocation = None
         self.isOfType = "link"
         self.isUrlInternal = True
-
 
     def getURL(self):
         return self.url
@@ -42,7 +43,7 @@ class UrlResult:
         self.statusCode = aStatusCode
 
     def getParentUrl(self):
-        if len(self.parentUrls) is 0:
+        if len(self.parentUrls) == 0:
             return None
         return self.parentUrls[0]
 
@@ -57,8 +58,8 @@ class UrlResult:
 
     def addParentUrl(self, url, text):
         if text is None:
-            text = ''
-        ParentUrlText = namedtuple("ParentUrlText", ["text","url"])
+            text = ""
+        ParentUrlText = namedtuple("ParentUrlText", ["text", "url"])
         parentUrlText = ParentUrlText(text, url)
         self.parentUrls.append(parentUrlText)
 

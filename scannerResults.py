@@ -1,26 +1,29 @@
 import datetime
 
+
 class ScannerResults:
     """stores the results of the scan
-    
-    This class stores the results of the scan and allows you to get filtered results.
+
+    This class stores the results of the scan
+    and allows you to get filtered results.
 
     eg:
 
     - get all external links
     - get all internal links
     - get all links with a particular status code
-    
+
     Typical usage example:
-    
+
     results = ScannerResults()
     results.addResult(urlResult)
     """
+
     def __init__(self):
-        self.results = [] # UrlResult Array
+        self.results = []  # UrlResult Array
         self.startDateTime = datetime.datetime.now()
         self.endDateTime = self.startDateTime
-        self.urlsScanned = [] # String Array
+        self.urlsScanned = []  # String Array
 
     def addResult(self, urlResult):
         self.results.append(urlResult)
@@ -60,10 +63,10 @@ class ScannerResults:
                 results.append(result)
         return results
 
-    def getResultsWhere(self,typeOf):
+    def getResultsWhere(self, typeOf):
         results = []
         for result in self.results:
-            if result.isA()==typeOf:
+            if result.isA() == typeOf:
                 results.append(result)
         return results
 
@@ -81,7 +84,6 @@ class ScannerResults:
 
     def getIFrameResults(self):
         return self.getResultsWhere("iframe")
-
 
     def getStartDateTime(self):
         return self.startDateTime.strftime("%d/%m/%Y %H:%M:%S")

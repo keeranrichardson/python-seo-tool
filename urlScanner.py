@@ -1,30 +1,34 @@
 import requests
 
+
 class UrlScanner:
     """Gets the status code and location of a link
-    
+
     Url Scanner issues a head request that allows us
     to get information like status code and location.
-    
+
     Typical usage example:
-    
+
     urlScanner = UrlScanner(url)
     redirectLocation = urlScanner.getLocation()
 
     Attributes:
         url: the url that you want the status code or location of
     """
+
     def __init__(self, url):
         self.url = url
         self.response = None
-        self.location = ''
+        self.location = ""
 
     def getStatus(self):
         try:
             if self.response is None:
-                self.response = requests.head(self.url, allow_redirects=False, timeout=10)
-            if self.response.status_code in [301,302,307,308]:
-                self.location = self.response.headers['Location']
+                self.response = requests.head(
+                    self.url, allow_redirects=False, timeout=10
+                )
+            if self.response.status_code in [301, 302, 307, 308]:
+                self.location = self.response.headers["Location"]
 
             return self.response.status_code
         except Exception as e:

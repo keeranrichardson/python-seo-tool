@@ -4,13 +4,14 @@ from webPage import WebPage
 from urlResult import UrlResult
 from scannerResults import ScannerResults
 
+
 class Scanner:
     """Scan and crawl the websites
-    
+
     This class does all the work for the scanning of the website.
-    
+
     Typical usage example:
-    
+
     scanner = Scanner(urlToParse, parseUrl.netloc)
     scanner.scan()
 
@@ -18,6 +19,7 @@ class Scanner:
         url: The url that is being scanned
         restrictToDomain: The domain that we do not want to scan outside of
     """
+
     def __init__(self, url, restrictToDomain):
         # config for handling urls with slash at end
         self.treatUrlsWithEndingSlashSameAsWithout = False
@@ -33,12 +35,13 @@ class Scanner:
         self.urlsToScan = [urlResultHomePage]
         self.urlsScanned = {}
         self.urlsStatusChecked = {}
-        self.urlsFound = {self.sanitiseURL(self.startingUrl):urlResultHomePage}
-        # configuring scanner to crawl as well as check the status. If false will only check status
+        self.urlsFound = {self.sanitiseURL(self.startingUrl): urlResultHomePage}
+        # configuring scanner to crawl as well as check the status.
+        # If false will only check status
         self.canCrawlUrls = True
         self.rateLimitSeconds = 0
         # events to log
-        self.events=[]
+        self.events = []
 
     def clearEvents(self):
         self.events = []
@@ -56,7 +59,7 @@ class Scanner:
         return len(self.urlsToScan) > 0
 
     def setRateLimitMilliseconds(self, milliseconds):
-        self.rateLimitSeconds = int(milliseconds)/1000
+        self.rateLimitSeconds = int(milliseconds) / 1000
 
     def setCanCrawlUrls(self, canCrawl):
         self.canCrawlUrls = canCrawl
@@ -79,7 +82,7 @@ class Scanner:
     def scanPage(self, urlResult):
         self.clearEvents()
 
-        self.logEvent("About to check "+ urlResult.getURL())
+        self.logEvent("About to check " + urlResult.getURL())
 
         webPage = WebPage(urlResult.getURL())
         webPageUrl = self.sanitiseURL(webPage.getURL())
@@ -105,15 +108,54 @@ class Scanner:
             else:
                 if urlResult.isLink() and self.isAllowedToBeCrawled(webPageUrl):
 
-                    self.addResultsToCrawl(webPage.findLinks(), "links", webPageUrl,'url', self.addParentToPage)
-                    self.addResultsToCrawl(webPage.findImages(), "images", webPageUrl,'src', self.addParentToPageImage)
-                    self.addResultsToCrawl(webPage.findHeadLinks(), "head links", webPageUrl,'href', self.addParentToPageHeadLink)
-                    self.addResultsToCrawl(webPage.findScripts(), "scripts", webPageUrl,'src', self.addParentToPageScript)
-                    self.addResultsToCrawl(webPage.findIFrames(), "iframes", webPageUrl,'src', self.addParentToPageIFrame)
+                    self.addResultsToCrawl(
+                        webPage.findLinks(),
+                        "links",
+                        webPageUrl,
+                        "url",
+                        self.addParentToPage,
+                    )
+                    self.addResultsToCrawl(
+                        webPage.findImages(),
+                        "images",
+                        webPageUrl,
+                        "src",
+                        self.addParentToPageImage,
+                    )
+                    self.addResultsToCrawl(
+                        webPage.findHeadLinks(),
+                        "head links",
+                        webPageUrl,
+                        "href",
+                        self.addParentToPageHeadLink,
+                    )
+                    self.addResultsToCrawl(
+                        webPage.findScripts(),
+                        "scripts",
+                        webPageUrl,
+                        "src",
+                        self.addParentToPageScript,
+                    )
+                    self.addResultsToCrawl(
+                        webPage.findIFrames(),
+                        "iframes",
+                        webPageUrl,
+                        "src",
+                        self.addParentToPageIFrame,
+                    )
 
         self.urlsStatusChecked[webPageUrl] = urlResult
 
-        self.logEvent("status code " + urlResult.isA() + ": " + str(webPage.getStatusCode()) + " - " + webPageUrl + " " + str(urlResult.isInternal()))
+        self.logEvent(
+            "status code "
+            + urlResult.isA()
+            + ": "
+            + str(webPage.getStatusCode())
+            + " - "
+            + webPageUrl
+            + " "
+            + str(urlResult.isInternal())
+        )
         return self.events
 
     def addUrlToScanAndFoundQueues(self, url):
@@ -127,9 +169,13 @@ class Scanner:
 
         return False
 
-    def addResultsToCrawl(self, foundResults, typeOfResult, webPageUrl,tupleVal, callback):
+    def addResultsToCrawl(
+        self, foundResults, typeOfResult, webPageUrl, tupleVal, callback
+    ):
 
-        self.logEvent("found " + str(len(foundResults)) + " " + typeOfResult + " on " + webPageUrl)
+        self.logEvent(
+            "found " + str(len(foundResults)) + " " + typeOfResult + " on " + webPageUrl
+        )
         resultsToProcess = 0
 
         for aTuple in foundResults:
@@ -137,15 +183,22 @@ class Scanner:
                 resultsToProcess += 1
             callback(aTuple, webPageUrl)
 
-        self.logEvent("number of " + typeOfResult + " to scan: " + str(resultsToProcess) + " on " + webPageUrl)
+        self.logEvent(
+            "number of "
+            + typeOfResult
+            + " to scan: "
+            + str(resultsToProcess)
+            + " on "
+            + webPageUrl
+        )
 
-    def addParentToPage(self,aLinkTuple,parentPageUrl):
+    def addParentToPage(self, aLinkTuple, parentPageUrl):
         # add parent link to urlresult object
         sanitisedALink = self.sanitiseURL(aLinkTuple.url)
         result = self.getUrlFromQueue(sanitisedALink)
         result.addParentUrl(parentPageUrl, aLinkTuple.text)
 
-    def addParentToPageImage(self,aImageTuple,parentPageUrl):
+    def addParentToPageImage(self, aImageTuple, parentPageUrl):
         # add parent link to urlresult object
         sanitisedALink = self.sanitiseURL(aImageTuple.src)
         result = self.getUrlFromQueue(sanitisedALink)
@@ -161,7 +214,7 @@ class Scanner:
     def addParentToPageScript(self, aScriptTuple, parentPageUrl):
         sanitisedALink = self.sanitiseURL(aScriptTuple.src)
         result = self.getUrlFromQueue(sanitisedALink)
-        result.addParentUrl(parentPageUrl, '')
+        result.addParentUrl(parentPageUrl, "")
         result.setUrlAsScript()
 
     def addParentToPageIFrame(self, aIFrameTuple, parentPageUrl):
@@ -193,8 +246,8 @@ class Scanner:
     def sanitiseURL(self, url):
 
         if self.treatUrlsWithEndingSlashSameAsWithout:
-            if url.endswith('/'):
-                url = url.removesuffix('/')
+            if url.endswith("/"):
+                url = url.removesuffix("/")
         return url
 
     def haveScannedAlready(self, url):
@@ -203,7 +256,7 @@ class Scanner:
             return False
         return True
 
-    def isInternal(self,url):
+    def isInternal(self, url):
         parsedUrl = urlparse(url)
         if self.restrictToDomain in parsedUrl.netloc:
             return True
