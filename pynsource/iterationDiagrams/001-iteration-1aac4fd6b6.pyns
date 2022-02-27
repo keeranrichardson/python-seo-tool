@@ -1,0 +1,14 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'Url', 'x':214, 'y':58, 'width':64, 'height':94, 'attrs': 'response|url', 'meths': '__init__|getStatus'}
+{'type':'umlshape', 'id':'requests.head', 'x':352, 'y':87, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'WebPage', 'x':202, 'y':212, 'width':94, 'height':164, 'attrs': 'html|imagesFound|soup|statusCode|url|urlsFound', 'meths': '__init__|findImages|findLinks|isUrlScannable|makeFullUrl'}
+{'type':'umlshape', 'id':'BeautifulSoup', 'x':367, 'y':281, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Interface', 'x':38, 'y':245, 'width':86, 'height':94, 'attrs': 'page|url', 'meths': '__init__|scan'}
+{'type':'umlshape', 'id':'main.py', 'x':46, 'y':165, 'width':69, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'edge', 'id':'requests.head_to_Url', 'source':'requests.head', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_Url', 'source':'Url', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'BeautifulSoup_to_WebPage', 'source':'BeautifulSoup', 'target':'WebPage', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'WebPage_to_Interface', 'source':'WebPage', 'target':'Interface', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_WebPage', 'source':'Url', 'target':'WebPage', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'Interface_to_main.py', 'source':'Interface', 'target':'main.py', 'uml_edge_type': 'association'}

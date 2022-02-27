@@ -1,0 +1,26 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'BrowserController', 'x':187, 'y':110, 'width':153, 'height':64, 'attrs': '', 'meths': '__init__|open'}
+{'type':'umlshape', 'id':'HTMLReporter', 'x':29, 'y':289, 'width':111, 'height':84, 'attrs': 'scannerResult', 'meths': '__init__|makeReport'}
+{'type':'umlshape', 'id':'Scanner', 'x':196, 'y':225, 'width':70, 'height':114, 'attrs': 'page|results|url', 'meths': '__init__|getResults|scan'}
+{'type':'umlshape', 'id':'ScannerResults', 'x':164, 'y':405, 'width':128, 'height':94, 'attrs': 'results', 'meths': '__init__|add|getResults'}
+{'type':'umlshape', 'id':'WebPage', 'x':371, 'y':191, 'width':94, 'height':164, 'attrs': 'html|imagesFound|soup|statusCode|url|urlsFound', 'meths': '__init__|findImages|findLinks|isUrlScannable|makeFullUrl'}
+{'type':'umlshape', 'id':'BeautifulSoup', 'x':511, 'y':126, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Url', 'x':339, 'y':400, 'width':64, 'height':94, 'attrs': 'response|url', 'meths': '__init__|getStatus'}
+{'type':'umlshape', 'id':'requests.head', 'x':500, 'y':349, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'TestUrl', 'x':488, 'y':415, 'width':160, 'height':74, 'attrs': '', 'meths': 'testErrorReadingUrl|testUrlExistsReturn200|testUrlNotExistsReturn404'}
+{'type':'umlshape', 'id':'TestWebPage', 'x':525, 'y':214, 'width':148, 'height':84, 'attrs': '', 'meths': 'testWebPageError|testWebPageMakeFullUrl|testWebPageNotScannable|testWebPageScannable'}
+{'type':'umlshape', 'id':'main.py', 'x':78, 'y':182, 'width':69, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'edge', 'id':'ScannerResults_to_Scanner', 'source':'ScannerResults', 'target':'Scanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'WebPage_to_Scanner', 'source':'WebPage', 'target':'Scanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'BeautifulSoup_to_WebPage', 'source':'BeautifulSoup', 'target':'WebPage', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'requests.head_to_Url', 'source':'requests.head', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_Url', 'source':'Url', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_TestUrl', 'source':'Url', 'target':'TestUrl', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'WebPage_to_TestWebPage', 'source':'WebPage', 'target':'TestWebPage', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'Scanner_to_main.py', 'source':'Scanner', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'HTMLReporter_to_main.py', 'source':'HTMLReporter', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'Url_to_Scanner', 'source':'Url', 'target':'Scanner', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'BrowserController_to_main.py', 'source':'BrowserController', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ScannerResults_to_HTMLReporter', 'source':'ScannerResults', 'target':'HTMLReporter', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'Url_to_WebPage', 'source':'Url', 'target':'WebPage', 'uml_edge_type': 'association'}

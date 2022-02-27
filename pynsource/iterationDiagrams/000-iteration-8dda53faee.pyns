@@ -1,0 +1,13 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'Url', 'x':89, 'y':117, 'width':64, 'height':94, 'attrs': 'response|url', 'meths': '__init__|getStatus'}
+{'type':'umlshape', 'id':'requests.head', 'x':56, 'y':300, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'WebPage', 'x':256, 'y':128, 'width':94, 'height':134, 'attrs': 'html|soup|statusCode|url|urlsFound', 'meths': '__init__|findLinks|isUrlScannable'}
+{'type':'umlshape', 'id':'BeautifulSoup', 'x':254, 'y':301, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'TestUrl', 'x':48, 'y':11, 'width':160, 'height':74, 'attrs': '', 'meths': 'testErrorReadingUrl|testUrlExistsReturn200|testUrlNotExistsReturn404'}
+{'type':'umlshape', 'id':'TestWebPage', 'x':243, 'y':11, 'width':148, 'height':74, 'attrs': '', 'meths': 'testWebPageError|testWebPageNotScannable|testWebPageScannable'}
+{'type':'edge', 'id':'requests.head_to_Url', 'source':'requests.head', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_Url', 'source':'Url', 'target':'Url', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'BeautifulSoup_to_WebPage', 'source':'BeautifulSoup', 'target':'WebPage', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Url_to_TestUrl', 'source':'Url', 'target':'TestUrl', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'WebPage_to_TestWebPage', 'source':'WebPage', 'target':'TestWebPage', 'uml_edge_type': 'association'}

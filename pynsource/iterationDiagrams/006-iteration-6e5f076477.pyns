@@ -1,0 +1,45 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'BrowserController', 'x':216, 'y':250, 'width':153, 'height':64, 'attrs': '', 'meths': '__init__|open'}
+{'type':'umlshape', 'id':'ConfigParams', 'x':671, 'y':160, 'width':244, 'height':194, 'attrs': 'args|vargs', 'meths': '__init__|getAsHtmlFileName|getConfigParamsFromCommandLineArguments|getCurrentDateString|getDefaultConfigParams|getHTMLReportFileName|getReportPath|getUrlToParse|isGui|setReportFileName|setReportPath|setUrl'}
+{'type':'umlshape', 'id':'FolderUtils', 'x':147, 'y':535, 'width':148, 'height':94, 'attrs': '', 'meths': '__init__|createCWDFolder|createFolderIfNotExists|createPath|getCWDPath'}
+{'type':'umlshape', 'id':'HTMLReporter', 'x':223, 'y':93, 'width':111, 'height':94, 'attrs': 'scannerResult', 'meths': '__init__|aTag|makeReport'}
+{'type':'umlshape', 'id':'ReportGenerator', 'x':57, 'y':199, 'width':136, 'height':124, 'attrs': 'configParams|pathAndFileName|scanner', 'meths': '__init__|generateReport|getPath|getPathAndFileName'}
+{'type':'umlshape', 'id':'Scanner', 'x':369, 'y':401, 'width':232, 'height':224, 'attrs': 'restrictToDomain|results|startingUrl|treatUrlsWithEndingSlashSameAsWithout|urlsScanned|urlsStatusChecked|urlsToScan', 'meths': '__init__|addUrlToScan|getResults|getUrlsToScan|haveScannedAlready|isAllowedToBeScanned|isMoreToScan|scan|scanNext|scanPage'}
+{'type':'umlshape', 'id':'ScannerResults', 'x':524, 'y':659, 'width':128, 'height':174, 'attrs': 'endDateTime|results|startDateTime|urlsScanned', 'meths': '__init__|add|addUrlScanned|getEndDateTimeRaw|getResults|getStartDateTime|getStartDateTimeRaw|getUrlsScanned'}
+{'type':'umlshape', 'id':'UrlResult', 'x':380, 'y':668, 'width':88, 'height':124, 'attrs': 'parentUrl|statusCode|url', 'meths': '__init__|getParentUrl|getStatusCode|getURL'}
+{'type':'umlshape', 'id':'TkinterGui', 'x':467, 'y':19, 'width':154, 'height':284, 'attrs': 'btn2|choosePathButton|configParams|enterPath|pathLabel|rateLimitMenu|rateLimitValue|report|scanner|showLogs|startScanBtn|txtfld|window', 'meths': '__init__|choosePath|continueScan|generateReport|getCurrentHTMLReportPath|getUrlToParse|openReport|showErrorMessage|showGui|startScan'}
+{'type':'umlshape', 'id':'ValidateUrl', 'x':671, 'y':19, 'width':102, 'height':84, 'attrs': 'url', 'meths': '__init__|canUrlBeScanned'}
+{'type':'umlshape', 'id':'tk.Tk', 'x':364, 'y':61, 'width':52, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'UrlScanner', 'x':698, 'y':397, 'width':94, 'height':104, 'attrs': 'response|url', 'meths': '__init__|getStatus|isScannable'}
+{'type':'umlshape', 'id':'requests.head', 'x':826, 'y':528, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'WebPage', 'x':674, 'y':538, 'width':94, 'height':164, 'attrs': 'html|imagesFound|soup|statusCode|url|urlsFound', 'meths': '__init__|findImages|findLinks|isUrlScannable|makeFullUrl'}
+{'type':'umlshape', 'id':'BeautifulSoup', 'x':826, 'y':602, 'width':119, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'TestHTMLReporter', 'x':48, 'y':80, 'width':144, 'height':64, 'attrs': '', 'meths': 'testATag|testMakeReport'}
+{'type':'umlshape', 'id':'TestUrl', 'x':850, 'y':404, 'width':160, 'height':74, 'attrs': '', 'meths': 'testErrorReadingUrl|testUrlExistsReturn200|testUrlNotExistsReturn404'}
+{'type':'umlshape', 'id':'TestWebPage', 'x':818, 'y':676, 'width':148, 'height':84, 'attrs': '', 'meths': 'testWebPageError|testWebPageMakeFullUrl|testWebPageNotScannable|testWebPageScannable'}
+{'type':'umlshape', 'id':'main.py', 'x':231, 'y':411, 'width':69, 'height':24, 'attrs': '', 'meths': ''}
+{'type':'edge', 'id':'ScannerResults_to_Scanner', 'source':'ScannerResults', 'target':'Scanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'UrlResult_to_Scanner', 'source':'UrlResult', 'target':'Scanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'tk.Tk_to_TkinterGui', 'source':'tk.Tk', 'target':'TkinterGui', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'Scanner_to_TkinterGui', 'source':'Scanner', 'target':'TkinterGui', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'ReportGenerator_to_TkinterGui', 'source':'ReportGenerator', 'target':'TkinterGui', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'requests.head_to_UrlScanner', 'source':'requests.head', 'target':'UrlScanner', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'BeautifulSoup_to_WebPage', 'source':'BeautifulSoup', 'target':'WebPage', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'UrlScanner_to_TestUrl', 'source':'UrlScanner', 'target':'TestUrl', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'TestWebPage_to_WebPage', 'source':'TestWebPage', 'target':'WebPage', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'UrlScanner_to_WebPage', 'source':'UrlScanner', 'target':'WebPage', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'UrlScanner_to_Scanner', 'source':'UrlScanner', 'target':'Scanner', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'WebPage_to_Scanner', 'source':'WebPage', 'target':'Scanner', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'UrlResult_to_ScannerResults', 'source':'UrlResult', 'target':'ScannerResults', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'FolderUtils_to_main.py', 'source':'FolderUtils', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'Scanner_to_main.py', 'source':'Scanner', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'TkinterGui_to_main.py', 'source':'TkinterGui', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ReportGenerator_to_main.py', 'source':'ReportGenerator', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'BrowserController_to_main.py', 'source':'BrowserController', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'BrowserController_to_TkinterGui', 'source':'BrowserController', 'target':'TkinterGui', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ReportGenerator_to_HTMLReporter', 'source':'ReportGenerator', 'target':'HTMLReporter', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'HTMLReporter_to_TestHTMLReporter', 'source':'HTMLReporter', 'target':'TestHTMLReporter', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ValidateUrl_to_TkinterGui', 'source':'ValidateUrl', 'target':'TkinterGui', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ConfigParams_to_main.py', 'source':'ConfigParams', 'target':'main.py', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'ConfigParams_to_TkinterGui', 'source':'ConfigParams', 'target':'TkinterGui', 'uml_edge_type': 'association'}
