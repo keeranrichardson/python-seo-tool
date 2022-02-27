@@ -1,5 +1,6 @@
 # High level flow diagram
 
+```mermaid
 flowchart TD
     A[Start] --> isGuiOn?{Is Gui on?}
     isGuiOn? -->|Yes| showGui
@@ -19,9 +20,11 @@ flowchart TD
     crawlSite[Crawl Site Finding\n All Links] -->generateReport
     generateReport[Generate HTML Report\n With all results from scan] --> openReport
     openReport[Open HTML Report in \nuser's Default Browser] --> finish[End]
+```
 
 # Scan WebSite
 
+```mermaid
 flowchart TD
     start[Start] --> scanUrl
     scanUrl[Add Start Page\n URL to Queue] --> getNextUrl
@@ -35,9 +38,11 @@ flowchart TD
     moreToScan? -->|No| generateReport
     generateReport[Generate HTML Report\n With all results from scan] --> openReport
     openReport[Open HTML Report in \nuser's Default Browser] --> finish[End]
+```
 
 # Scan Sitemap
 
+```mermaid
 flowchart TD
     start[Start] --> scanUrl
     scanUrl[Read Sitemap] --> addUrlsToQueue
@@ -49,3 +54,4 @@ flowchart TD
     moreToScan? -->|No| generateReport
     generateReport[Generate HTML Report\n With all results from scan] --> openReport
     openReport[Open HTML Report in \nuser's Default Browser] --> finish[End]
+```
